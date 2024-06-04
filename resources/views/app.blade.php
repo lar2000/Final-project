@@ -12,6 +12,8 @@
 <link rel="stylesheet" href="{{ url('assets/vendor/css/theme-default.css?id=c1176873cc66093bc08d573f549565f3')}}">
 <link rel="stylesheet" href="{{ url('assets/css/demo.css?id=69dfc5e48fce5a4ff55ff7b593cdf93d')}}">
 
+<link rel="stylesheet" href="{{ url('assets/css/font_lao.css')}}">
+
     @vite('resources/css/app.css')
 
 </head>

@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h1>Markroom page</h1>
+        <h1>Booking page</h1>
     </div>
 </template>
 

@@ -1,8 +1,9 @@
 import { createWebHistory, createRouter } from "vue-router";
 
 import Home from  '../Pages/Home.vue';
+import Account from '../Pages/Account.vue'
 import Login from  '../Pages/Login.vue';
-import Markroom from  '../Pages/Markroom.vue';
+import Booking from  '../Pages/Booking.vue';
 import Moveinout from  '../Pages/Movein-out.vue';
 import Payment from  '../Pages/Payment.vue';
 import Nofitication from  '../Pages/Notification.vue';
@@ -21,15 +22,21 @@ export const routes = [
 
     },
     {
+        name: 'Account',
+        path: '/Account',
+        component: Account
+
+    },
+    {
         name: 'Login',
         path: '/Login',
         component: Login
 
     },
     {
-        name: 'Markroom',
-        path: '/Markroom',
-        component: Markroom
+        name: 'Booking',
+        path: '/Booking',
+        component: Booking
 
     },
     {

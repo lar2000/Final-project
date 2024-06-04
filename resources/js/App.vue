@@ -48,7 +48,7 @@
             </a>
             <ul class="dropdown-menu dropdown-menu-end">
               <li>
-                <a class="dropdown-item" href="javascript:void(0);">
+                <router-link class="dropdown-item" to="/Account">
                   <div class="d-flex">
                     <div class="flex-shrink-0 me-3">
                       <div class="avatar avatar-online">
@@ -60,7 +60,7 @@
                       <small class="text-muted">Admin</small>
                     </div>
                   </div>
-                </a>
+                </router-link>
               </li>
               <li>
                 <div class="dropdown-divider"></div>

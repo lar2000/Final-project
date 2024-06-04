@@ -58,7 +58,7 @@
   </li>
 
   <li class="menu-item ">
-    <router-link to="/Markroom" class="menu-link">
+    <router-link to="/Booking" class="menu-link">
               <i class='menu-icon bx bx-bookmark-alt-plus'></i>
               <div>ການຈອງ</div>
             </router-link>
