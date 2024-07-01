@@ -11,9 +11,10 @@ class Booking extends Model
     protected $fillable = [
         'book_id',
         'book_date',
-        'rent_date',
-        'room_id',
+        'book_enddate',
+        'room_number',
         'cust_id',
-        'user_id',
+        'status',
+        'book_pay',
     ];
 }

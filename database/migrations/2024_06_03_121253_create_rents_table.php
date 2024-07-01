@@ -12,18 +12,18 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('rents', function (Blueprint $table) {
-            $table->id();
             $table->string('rent_id');
             $table->date('date_start');
             $table->date('date_end');
             $table->unsignedBigInteger('book_id');
-            $table->unsignedBigInteger('room_id');
+            $table->unsignedBigInteger('room_number');
             $table->unsignedBigInteger('cust_id');
             $table->unsignedBigInteger('user_id');
+            $table->integer('room_price');
             $table->timestamps();
 
             $table->foreign('book_id')->references('id')->on('bookings')->onDelete('cascade');
-            $table->foreign('room_id')->references('id')->on('rooms')->onDelete('cascade');
+            $table->foreign('room_number')->references('id')->on('rooms')->onDelete('cascade');
             $table->foreign('cust_id')->references('id')->on('customers')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });

@@ -13,7 +13,9 @@ class Rent extends Model
         'date_start',
         'date_end',
         'book_id',
-        'room_id',
+        'room_number',
         'cust_id',
+        'user_id',
+        'room_price',
     ];
 }

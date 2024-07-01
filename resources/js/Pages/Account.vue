@@ -57,9 +57,9 @@
                 <input type="text" class="form-control" id="zipCode" name="zipCode" placeholder="231465" maxlength="6">
               </div>
               <div class="mb-3 col-md-6">
-                <label class="form-label" for="country">ແຂວງ</label>
-                <select id="Province" class="select2 form-select">
-                  <option placeholder="">ນະຄອນຫຼວງ</option>
+                <label class="form-label" for="province">ແຂວງ</label>
+                <select id="province" class="select2 form-select">
+                  <option value="ct" placeholder="">ນະຄອນຫຼວງ</option>
                   <option value="phong">ຜົ້ງສາລີ</option>
                   <option value="luangnamtha">ຫຼວງນໍ້ທາ</option>
                   <option value="xay">ໄຊຍະບູລີ</option>
@@ -79,16 +79,28 @@
                 </select>
               </div>
               <div class="mb-3 col-md-6">
-                <label for="language" class="form-label">ເມືອງ</label>
-                <select id="language" class="select2 form-select">
-                  <option value="">Select </option>
-                  <option value="en">English</option>
-                  <option value="fr">French</option>
-                  <option value="de">German</option>
-                  <option value="pt">Portuguese</option>
+                <label for="ct" class="form-label">ເມືອງ</label>
+                <select id="ct" class="select2 form-select">
+                  <option value="ct">ຈັນທະບູລີ</option>
+                  <option value="ct">ສີໂຄດຕະບອງ</option>
+                  <option value="ct">ໄຊເສດຖາ</option>
+                  <option value="ct">ສີສັດຕະນາກ</option>
+                  <option value="ct">ນາຊາຍທອງ</option>
+                  <option value="ct">ໄຊທານີ</option>
+                  <option value="ct">ຫາດຊາຍຟອງ</option>
+                  <option value="ct">ສັງທອງ</option>
+                  <option value="ct">ປາກງື່ມ</option>
+
+                  <option value="phong">ຜົ້ງສາລີ</option>
+                  <option value="phong">ໃໝ່</option>
+                  <option value="phong">ບຸນເໜືອ</option>
+                  <option value="phong">ສຳພັນ</option>
+                  <option value="phong">ຍອດອູ</option>
+                  <option value="phong">ໄຊທານີ</option>
+                  <option value="phong">ບຸນໃຕ້</option>
                 </select>
               </div>
-             
+            
               <div class="mb-3 col-md-6">
                 <label for="currency" class="form-label">ບ້ານ</label>
                 <input type="text" class="form-control" id="zipCode" name="zipCode" placeholder="ບ້ານ" maxlength="6">

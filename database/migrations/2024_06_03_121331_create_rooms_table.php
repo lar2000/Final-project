@@ -12,13 +12,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('rooms', function (Blueprint $table) {
-            $table->id();
-            $table->integer('room_id');
             $table->string('room_number');
-            $$table->foreign('room_type')->references('id')->on('roomstypes')->onDelete('cascade');
+            $table->unsignedBigInteger('roomtype_id');
             $table->enum('status', ['ຈອງແລ້ວ', 'ບໍ່ຫວ່າງ', 'ຫວ່າງ'])->change();
-            $table->integer('room_id');
             $table->timestamps();
+        
+            $$table->foreign('roomtype_id')->references('id')->on('roomstypes')->onDelete('cascade');
+            
         });
     }
 

@@ -12,8 +12,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('expenses', function (Blueprint $table) {
-            $table->id();
+            $table->string('user_id');
+            $table->date('expen_date');
+            $table->string('expen_detail');
+            $table->integer('total_price');
             $table->timestamps();
+
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 
