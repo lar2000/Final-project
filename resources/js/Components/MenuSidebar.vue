@@ -47,23 +47,32 @@
   </a>
 </div>
 
-<div class="menu-inner-shadow"></div>
-
 <ul class="menu-inner py-1">   
-  <li class="menu-item ">
-    <router-link to="/Home" class="menu-link">
-      <i class='menu-icon bx bx-grid-alt'></i>
-              <div>Home</div>
-            </router-link>
-  </li>
-
+  <ul class="menu-item link-list-opt no-bdr">
+            <li class="menu-link" data-bs-toggle="dropdown">
+              <i class='menu-icon bx bx-list-ul'></i>
+               <div>ຂໍ້ມູນພື້ນຖານ</div></li>
+            <div class="dropdown-menu dropdown-menu-end">
+              <router-link to="/Users" class="menu-link">
+              <div>ຜູ້ໃຊ້</div>
+              </router-link>
+              <router-link to="/Customers" class="menu-link">
+              <div>ລູກຄ້າ</div>
+              </router-link>
+              <router-link to="/Rooms" class="menu-link">
+              <div>ຫ້ອງ</div>
+              </router-link>
+              <router-link to="/Booking" class="menu-link">
+              <div>ປະເພດຫ້ອງ ແລະ ລາຄາ</div></router-link>
+</div>
+</ul>
   <li class="menu-item ">
     <router-link to="/Booking" class="menu-link">
-              <i class='menu-icon bx bx-bookmark-alt-plus'></i>
+      <i class='menu-icon bx bx-bookmark-alt-plus'></i>
               <div>ການຈອງ</div>
             </router-link>
+            
   </li>
-
   <li class="menu-item ">
     <router-link to="/Movein-out" class="menu-link">
       <i class='menu-icon bx bx-transfer-alt'></i>

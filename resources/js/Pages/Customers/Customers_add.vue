@@ -1,6 +1,12 @@
 <template>
-    <div>
-        <div class="modal-body modal-body-md">
+  <div>
+    <div class="modal fade" tabindex="-1" role="dialog" id="add-customer">
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <a href="#" class="close" data-bs-dismiss="modal"
+            ><em class="icon ni ni-cross-sm"></em
+          ></a>
+          <div class="modal-body modal-body-md">
             <h5 class="modal-title">Add Customer</h5>
             <form action="#" class="mt-2">
               <div class="row g-gs">
@@ -97,29 +103,28 @@
               </div>
             </form>
           </div>
+        </div>
+      </div>
     </div>
+  </div>
 </template>
 
 <script>
 export default {
-    name: 'LaravelVue3POS',
+  name: 'LaravelVue3CustomersAdd',
 
-    data() {
-        return {
-            
-        };
-    },
+  data() {
+    return {
+      
+    };
+  },
 
-    mounted() {
-        
-    },
+  mounted() {
+    
+  },
 
-    methods: {
-        
-    },
+  methods: {
+    
+  },
 };
 </script>
-
-<style lang="scss" scoped>
-
-</style>

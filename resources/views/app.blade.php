@@ -12,6 +12,9 @@
 <link rel="stylesheet" href="{{ url('assets/vendor/css/theme-default.css?id=c1176873cc66093bc08d573f549565f3')}}">
 <link rel="stylesheet" href="{{ url('assets/css/demo.css?id=69dfc5e48fce5a4ff55ff7b593cdf93d')}}">
 
+<link rel="stylesheet" href="{{ url('assets//css/dashlite.css?ver=3.2.3')}}">
+<link rel="stylesheet" href="{{ url('assets//css/theme.css?ver=3.2.3')}}">
+
 <link rel="stylesheet" href="{{ url('assets/css/font_lao.css')}}">
 
     @vite('resources/css/app.css')
@@ -22,10 +25,17 @@
 <div id=app-vue></div>
 
 <!-- Core JS -->
+<script src="{{ url('assets/gtag/js?id=UA-91615293-4')}}"></script>
+<script>window.dataLayer = window.dataLayer || []; function gtag() { dataLayer.push(arguments); } gtag('js', new Date()); gtag('config', 'UA-91615293-4');</script>
 <script src="{{ url('assets/vendor/libs/jquery/jquery.js?id=fbe6a96815d9e8795a3b5ea1d0f39782')}}"></script>
 <script src="{{ url('assets/vendor/libs/popper/popper.js?id=bd2c3acedf00f48d6ee99997ba90f1d8')}}"></script>
 <script src="{{ url('assets/vendor/js/bootstrap.js?id=43cd2f28b83d6ba5a95e1b78ed109e43')}}"></script>
 <script src="{{ url('assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js?id=f4192eb35ed7bdba94dcb820a77d9e47')}}"></script>
+
+<script src="{{ url('assetsassets//js/bundle.js?ver=3.2.3')}}"></script>
+<script src="{{ url('assets//js/scripts.js?ver=3.2.3')}}"></script>
+<script src="{{ url('assets//js/demo-settings.js?ver=3.2.3')}}"></script>
+<script src="{{ url('assets//js/charts/chart-hotel.js?ver=3.2.3')}}"></script>
 
     @vite('resources/js/app.js')
 

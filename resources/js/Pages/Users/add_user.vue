@@ -1,7 +1,6 @@
 <template>
     <div>
       <div class="card mb-4">
-        <h5 class="card-header">Profile Details</h5>
         <!-- Account -->
         <div class="card-body">
           <div class="d-flex align-items-start align-items-sm-center gap-4">
@@ -17,7 +16,6 @@
                 <span class="d-none d-sm-block">Reset</span>
               </button>
   
-              <p class="text-muted mb-0">Allowed JPG, GIF or PNG. Max size of 800K</p>
             </div>
           </div>
         </div>

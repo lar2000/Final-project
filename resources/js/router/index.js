@@ -1,14 +1,17 @@
 import { createWebHistory, createRouter } from "vue-router";
 
 import Home from  '../Pages/Home.vue';
-import Account from '../Pages/Account.vue'
+import Users from '../Pages/Users/Users.vue';
+import Customers from '../Pages/Customers/Customers.vue';
 import Login from  '../Pages/Login.vue';
 import Booking from  '../Pages/Booking.vue';
+import Rooms from  '../Pages/Rooms.vue';
 import Moveinout from  '../Pages/Movein-out.vue';
 import Payment from  '../Pages/Payment.vue';
 import Nofitication from  '../Pages/Notification.vue';
 import Register from  '../Pages/Register.vue';
 import Report from  '../Pages/Report.vue';
+import Customers_add from "../Pages/Customers/Customers_add.vue";
 
 export const routes = [
     {
@@ -22,9 +25,27 @@ export const routes = [
 
     },
     {
-        name: 'Account',
-        path: '/Account',
-        component: Account
+        name: 'Customers',
+        path: '/Customers',
+        component: Customers
+
+    },
+    {
+        name: 'Customers_add',
+        path: '/Customers_add',
+        component: Customers_add
+
+    },
+    {
+        name: 'Users',
+        path: '/Users',
+        component: Users
+
+    },
+    {
+        name: 'Rooms',
+        path: '/Rooms',
+        component: Rooms
 
     },
     {
