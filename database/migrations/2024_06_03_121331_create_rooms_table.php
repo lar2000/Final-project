@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
+class CreateRoomsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,10 @@ return new class extends Migration
     {
         Schema::create('rooms', function (Blueprint $table) {
             $table->string('room_number');
-            $table->unsignedBigInteger('roomtype_id');
+            $table->integer('roomtype_id');
             $table->enum('status', ['ຈອງແລ້ວ', 'ບໍ່ຫວ່າງ', 'ຫວ່າງ'])->change();
             $table->timestamps();
-        
-            $$table->foreign('roomtype_id')->references('id')->on('roomstypes')->onDelete('cascade');
-            
+
         });
     }
 
@@ -29,4 +27,4 @@ return new class extends Migration
     {
         Schema::dropIfExists('rooms');
     }
-};
+}

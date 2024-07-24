@@ -1,7 +1,7 @@
 <template>
     <div>
         <!-- Layout Content -->
-  <div class="layout-wrapper layout-content-navbar ">
+  <div class="layout-wrapper layout-content-navbar">
   <div class="layout-container">
     
     <MenuSidebar />
@@ -118,21 +118,7 @@
 
           <!-- Footer -->
                     <!-- Footer-->
-<footer class="content-footer footer bg-footer-theme">
-  <div class="container-xxl d-flex flex-wrap justify-content-between py-2 flex-md-row flex-column">
-    <div class="mb-2 mb-md-0">
-      , made with ❤️ by <a href="https://themeselection.com" target="_blank" class="footer-link fw-medium">ThemeSelection</a>
-    </div>
-    <div class="d-none d-lg-inline-block">
-      <a href="https://themeselection.com/license/" class="footer-link me-4" target="_blank">License</a>
-      <a href="https://themeselection.com/" target="_blank" class="footer-link me-4">More Themes</a>
-      <a href="https://demos.themeselection.com/sneat-bootstrap-html-admin-template/documentation/laravel-introduction.html" target="_blank" class="footer-link me-4">Documentation</a>
-      <a href="https://github.com/themeselection/sneat-html-laravel-admin-template-free/issues" target="_blank" class="footer-link d-none d-sm-inline-block">Support</a>
-    </div>
-  </div>
-</footer>
-<!--/ Footer-->
-                    <!-- / Footer -->
+
           <div class="content-backdrop fade"></div>
         </div>
         <!--/ Content wrapper -->
@@ -145,13 +131,9 @@
         <!-- Drag Target Area To SlideIn Menu On Small Screens -->
     <div class="drag-target"></div>
   </div>
-  <!-- / Layout wrapper -->
-    <!--/ Layout Content -->
 
   
-  <div class="buy-now">
-    <a href="https://themeselection.com/item/sneat-bootstrap-laravel-admin-template/" target="_blank" class="btn btn-danger btn-buy-now">Upgrade To Pro</a>
-  </div>hi
+ 
     </div>
 </template>
 
@@ -161,7 +143,7 @@ export default {
 
     data() {
         return {
-            
+          
         };
     },
 
@@ -176,5 +158,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.layout-page {
+  margin-left: 240px; /* Adjust to match sidebar width */
+}
 
+@media (max-width: 1199.98px) {
+  .layout-page {
+    margin-left: 0; /* Reset margin for smaller screens */
+  }
+}
 </style>

@@ -2,12 +2,17 @@ import { createWebHistory, createRouter } from "vue-router";
 
 import Home from  '../Pages/Home.vue';
 import Users from '../Pages/Users/Users.vue';
+import Add_User from '../Pages/Users/Add_User.vue';
 import Customers from '../Pages/Customers/Customers.vue';
 import Login from  '../Pages/Login.vue';
-import Booking from  '../Pages/Booking.vue';
-import Rooms from  '../Pages/Rooms.vue';
-import Moveinout from  '../Pages/Movein-out.vue';
+import Add_Booking from  '../Pages/Booking/Add_Booking.vue';
+import All_Booking from  '../Pages/Booking/All_Booking.vue';
+import Edit_Booking from  '../Pages/Booking/Edit_Booking.vue';
+import Rooms from  '../Pages/Rooms/Rooms.vue';
+import checkin from  '../Pages/Check-in-out/check-in.vue';
+import checkout from  '../Pages/Check-in-out/check-out.vue';
 import Payment from  '../Pages/Payment.vue';
+import Expenses from  '../Pages/Expenses.vue';
 import Nofitication from  '../Pages/Notification.vue';
 import Register from  '../Pages/Register.vue';
 import Report from  '../Pages/Report.vue';
@@ -43,6 +48,12 @@ export const routes = [
 
     },
     {
+        name: 'Add_User',
+        path: '/Add_User',
+        component: Add_User
+
+    },
+    {
         name: 'Rooms',
         path: '/Rooms',
         component: Rooms
@@ -55,15 +66,33 @@ export const routes = [
 
     },
     {
-        name: 'Booking',
-        path: '/Booking',
-        component: Booking
+        name: 'Add_Booking',
+        path: '/Add_Booking',
+        component: Add_Booking
 
     },
     {
-        name: 'Movein-out',
-        path: '/Movein-out',
-        component: Moveinout
+        name: 'All_Booking',
+        path: '/All_Booking',
+        component: All_Booking
+
+    },
+    {
+        name: 'Edit_Booking',
+        path: '/Edit_Booking',
+        component: Edit_Booking
+
+    },
+    {
+        name: 'checkin',
+        path: '/checkin',
+        component: checkin
+
+    },
+    {
+        name: 'checkout',
+        path: '/checkout',
+        component: checkout
 
     },
     {
@@ -76,6 +105,12 @@ export const routes = [
         name: 'Payment',
         path: '/Payment',
         component: Payment
+
+    },
+    {
+        name: 'Expenses',
+        path: '/Expenses',
+        component: Expenses
 
     },
     {

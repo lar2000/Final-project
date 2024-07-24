@@ -37,16 +37,16 @@
                                   data-placeholder="Select multiple options"
                                 >
                                   <option value="default_option">
-                                    Select Gender
+                                    Seclet
                                   </option>
                                   <option value="option_select_gender">
-                                    Male
+                                    ຈອງແລ້ວ
                                   </option>
                                   <option value="option_select_gender">
-                                    Female
+                                    ຫວ່າງ
                                   </option>
                                   <option value="option_select_gender">
-                                    Other
+                                    ບໍ່ຫວ່າງ
                                   </option>
                                 </select>
                               </div>
@@ -162,7 +162,7 @@
                               <label class="form-label">Arrived Date</label>
                               <div class="form-control-wrap">
                                 <div class="form-icon form-icon-right">
-                                  <em class="icon ni ni-calendar"></em>
+                                  <i class='bx bxs-calendar'></i>
                                 </div>
                                 <input
                                   type="text"

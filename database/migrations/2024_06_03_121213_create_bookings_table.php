@@ -12,17 +12,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('bookings', function (Blueprint $table) {
-            $table->string('book_id');
+            $table->id('book_id');
             $table->date('book_date');
             $table->date('book_enddate');
-            $table->unsignedBigInteger('room_number');
-            $table->unsignedBigInteger('cust_id');
-            $table->enum('status', ['ຈອງແລ້ວ', 'ບໍ່ຫວ່າງ', 'ຫວ່າງ'])->change();
+            $table->string('room_number');
+            $table->string('cust_id');
             $table->string('book_pay');
             $table->timestamps();
 
-            $table->foreign('room_number')->references('id')->on('rooms')->onDelete('cascade');
-            $table->foreign('cust_id')->references('id')->on('customers')->onDelete('cascade');
         });
     }
 

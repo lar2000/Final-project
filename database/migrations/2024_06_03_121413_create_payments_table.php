@@ -13,11 +13,11 @@ return new class extends Migration
     {
         Schema::create('payments', function (Blueprint $table) {
             
-            $table->integer('pay_id');
-            $table->unsignedBigInteger('roomtype_id');
-            $table->unsignedBigInteger('room_number');
+            $table->id('pay_id');
+            $table->integer('roomtype_id');
+            $table->string('room_number');
             $table->date('month_year', 12);
-            $table->unsignedBigInteger('rent_id');
+            $table->string('rent_id');
             $table->integer('room_price');
             //ຄ່າໄຟ
            
@@ -29,10 +29,6 @@ return new class extends Migration
             //ຄ່າຂີ້ເຫຍື້ອ
             $table->integer('gar_price');
             $table->timestamps();
-
-            $table->foreign('rent_id')->references('id')->on('rents')->onDelete('cascade');
-            $table->foreign('room_number')->references('id')->on('rooms')->onDelete('cascade');
-            $table->foreign('roomtype_id')->references('id')->on('roomtypes')->onDelete('cascade');
         });
     }
 
