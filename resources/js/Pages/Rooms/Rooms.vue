@@ -1,566 +1,292 @@
 <template>
   <div>
     <div class="nk-content">
-            <div class="container-fluid">
-              <div class="nk-content-inner">
-                <div class="nk-content-body">
-                  <div class="nk-block-head nk-block-head-sm">
-                    <div class="nk-block-between g-3">
-                      <div class="nk-block-head-content">
-                        <h3 class="nk-block-title page-title">Room List</h3>
-                        <div class="nk-block-des text-soft">
-                          <p>Here is our verious rooms.</p>
-                        </div>
-                      </div>
-                      <div class="nk-block-head-content">
-                        <ul class="nk-block-tools g-3">
-                          <li>
-                            <div class="drodown">
-                              <a
-                                href="#"
-                                class="dropdown-toggle btn btn-icon btn-primary"
-                                data-bs-toggle="dropdown"
-                                ><em class="icon ni ni-plus"></em
-                              ></a>
+      <div class="container-fluid">
+        <div class="nk-content-inner">
+          <div class="nk-content-body">
+            <div class="nk-block-head nk-block-head-sm" v-if="!showForm">
+              <div class="nk-block-between">
+                <div class="nk-block-head-content">
+                  <h5 class="nk-block-title page-title">ລາຍການຫ້ອງ</h5>
+                </div>
+                <div class="nk-block-head-content">
+                  <div class="toggle-wrap nk-block-tools-toggle">
+                    <a href="#" class="btn btn-icon btn-trigger toggle-expand me-n1" data-target="pageMenu">
+                      <em class="icon ni ni-menu-alt-r"></em>
+                    </a>
+                    <div class="toggle-expand-content" data-content="pageMenu">
+                      <ul class="nk-block-tools g-3">
+                        <li class="nk-block-tools-opt">
+                          <div class="d-flex">
+                            <input type="text" class="form-control me-2" v-model="search" @keyup.enter="fetchRooms" placeholder="Search...">
+                            <button class="btn btn-icon btn-primary" @click="toggleForm('add')">
+                              <i class="bx bx-plus-medical"></i>
+                            </button>
+                          </div>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div v-if="!showForm" class="nk-block">
+              <div class="card card-bordered card-stretch">
+                <div class="card-inner-group">
+                  <div class="card-inner p-0">
+                    <table class="nk-tb-list nk-tb-ulist">
+                      <thead>
+                        <tr class="nk-tb-item nk-tb-head">
+                          <th class="nk-tb-col">ເບີຫ້ອງ</th>
+                          <th class="nk-tb-col">ລະຫັດປະເພດຫ້ອງ</th>
+                          <th class="nk-tb-col">Status</th>
+                          <th class="nk-tb-col">ຈັດການ</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr v-for="room in rooms" :key="room.id" class="nk-tb-item">
+                          <td class="nk-tb-col">{{ room.room_number }}</td>
+                          <td class="nk-tb-col">{{ room.roomtype_id }}</td>
+                          <td class="nk-tb-col">{{ room.status }}</td>
+                          <td class="nk-tb-col">
+                            <div class="dropdown">
+                              <a href="#" class="dropdown-toggle btn btn-icon btn-trigger" data-bs-toggle="dropdown">
+                                <i class="bx bx-dots-horizontal"></i>
+                              </a>
                               <div class="dropdown-menu dropdown-menu-end">
                                 <ul class="link-list-opt no-bdr">
                                   <li>
-                                    <a data-bs-toggle="modal" href="#add-room"
-                                      ><span>Add Room</span></a
-                                    >
+                                    <a href="#" @click="toggleForm('edit', room)">
+                                      <i class="menu-icon bx bxs-edit-alt"></i>
+                                      <span>ແກ້ໄຂ</span>
+                                    </a>
                                   </li>
                                   <li>
-                                    <a href="#"><span>Import Room</span></a>
+                                    <a href="#" @click="deleteRoom(room.id)">
+                                      <i class="menu-icon bx bxs-trash"></i>
+                                      <span>ລົບ</span>
+                                    </a>
                                   </li>
                                 </ul>
                               </div>
                             </div>
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
+                          </td>
+                        </tr>
+                        <tr v-if="rooms.length === 0">
+                          <td colspan="4" class="text-center">No rooms found</td>
+                        </tr>
+                      </tbody>
+                    </table>
                   </div>
-                  <div class="nk-block">
-                    <div class="card card-bordered card-stretch">
-                      <div class="card-inner-group">
-                        <div
-                          class="card-inner position-relative card-tools-toggle"
-                        >
-                          <div class="card-title-group">
-                            <div class="card-tools">
-                              <div class="form-inline flex-nowrap gx-3">
-                                <div class="form-wrap w-150px">
-                                  <select
-                                    class="form-select js-select2 js-select2-sm"
-                                    data-search="off"
-                                    data-placeholder="Bulk Action"
-                                  >
-                                    <option value="">Bulk Action</option>
-                                    <option value="change">
-                                      Change Status
-                                    </option>
-                                  </select>
-                                </div>
-                                <div class="btn-wrap">
-                                  <span class="d-none d-md-block"
-                                    ><button
-                                      class="btn btn-dim btn-outline-light disabled"
-                                    >
-                                      Apply
-                                    </button></span
-                                  ><span class="d-md-none"
-                                    ><button
-                                      class="btn btn-dim btn-outline-light btn-icon disabled"
-                                    >
-                                      <em
-                                        class="icon ni ni-arrow-right"
-                                      ></em></button
-                                  ></span>
-                                </div>
-                              </div>
-                            </div>
-                            <div class="card-tools me-n1">
-                              <ul class="btn-toolbar gx-1">
-                                <li>
-                                  <a
-                                    href="#"
-                                    class="btn btn-icon search-toggle toggle-search"
-                                    data-target="search"
-                                    ><em class="icon ni ni-search"></em
-                                  ></a>
-                                </li>
-                                <li class="btn-toolbar-sep"></li>
-                                <li>
-                                  <div class="toggle-wrap">
-                                    <a
-                                      href="#"
-                                      class="btn btn-icon btn-trigger toggle"
-                                      data-target="cardTools"
-                                      ><em class="icon ni ni-menu-right"></em
-                                    ></a>
-                                    <div
-                                      class="toggle-content"
-                                      data-content="cardTools"
-                                    >
-                                      <ul class="btn-toolbar gx-1">
-                                        <li class="toggle-close">
-                                          <a
-                                            href="#"
-                                            class="btn btn-icon btn-trigger toggle"
-                                            data-target="cardTools"
-                                            ><em
-                                              class="icon ni ni-arrow-left"
-                                            ></em
-                                          ></a>
-                                        </li>
-                                        <li>
-                                          <div class="dropdown">
-                                            <a
-                                              href="#"
-                                              class="btn btn-trigger btn-icon dropdown-toggle"
-                                              data-bs-toggle="dropdown"
-                                              ><div
-                                                class="dot dot-primary"
-                                              ></div>
-                                              <em
-                                                class="icon ni ni-filter-alt"
-                                              ></em
-                                            ></a>
-                                            <div
-                                              class="filter-wg dropdown-menu dropdown-menu-xl dropdown-menu-end"
-                                            >
-                                              <div class="dropdown-head">
-                                                <span
-                                                  class="sub-title dropdown-title"
-                                                  >Filter Rooms</span
-                                                >
-                                                <div class="dropdown">
-                                                  <a
-                                                    href="#"
-                                                    class="btn btn-sm btn-icon"
-                                                    ><em
-                                                      class="icon ni ni-more-h"
-                                                    ></em
-                                                  ></a>
-                                                </div>
-                                              </div>
-                                              <div
-                                                class="dropdown-body dropdown-body-rg"
-                                              >
-                                                <div class="row gx-6 gy-3">
-                                                  <div class="col-6">
-                                                    <div class="form-group">
-                                                      <label
-                                                        class="overline-title overline-title-alt"
-                                                        >Status</label
-                                                      ><select
-                                                        class="form-select js-select2 js-select2-sm"
-                                                      >
-                                                        <option value="any">
-                                                          Any Status
-                                                        </option>
-                                                        <option value="paid">
-                                                          Booked
-                                                        </option>
-                                                        <option value="open">
-                                                          Open
-                                                        </option>
-                                                        <option
-                                                          value="inactive"
-                                                        >
-                                                          Inactive
-                                                        </option>
-                                                      </select>
-                                                    </div>
-                                                  </div>
-                                                  <div class="col-6">
-                                                    <div class="form-group">
-                                                      <label
-                                                        class="overline-title overline-title-alt"
-                                                        >Room Type</label
-                                                      ><select
-                                                        class="form-select js-select2 js-select2-sm"
-                                                      >
-                                                        <option value="any">
-                                                          Any Type
-                                                        </option>
-                                                        <option value="single">
-                                                          Single
-                                                        </option>
-                                                        <option value="double">
-                                                          Double
-                                                        </option>
-                                                        <option value="delux">
-                                                          Delux
-                                                        </option>
-                                                        <option value="sdelux">
-                                                          Super Delux
-                                                        </option>
-                                                      </select>
-                                                    </div>
-                                                  </div>
-                                                  <div class="col-12">
-                                                    <div class="form-group">
-                                                      <button
-                                                        type="button"
-                                                        class="btn btn-secondary"
-                                                      >
-                                                        Filter
-                                                      </button>
-                                                    </div>
-                                                  </div>
-                                                </div>
-                                              </div>
-                                              <div
-                                                class="dropdown-foot between"
-                                              >
-                                                <a class="clickable" href="#"
-                                                  >Reset Filter</a
-                                                ><a href="#">Save Filter</a>
-                                              </div>
-                                            </div>
-                                          </div>
-                                        </li>
-                                        <li>
-                                          <div class="dropdown">
-                                            <a
-                                              href="#"
-                                              class="btn btn-trigger btn-icon dropdown-toggle"
-                                              data-bs-toggle="dropdown"
-                                              ><em
-                                                class="icon ni ni-setting"
-                                              ></em
-                                            ></a>
-                                            <div
-                                              class="dropdown-menu dropdown-menu-xs dropdown-menu-end"
-                                            >
-                                              <ul class="link-check">
-                                                <li><span>Show</span></li>
-                                                <li class="active">
-                                                  <a href="#">10</a>
-                                                </li>
-                                                <li><a href="#">20</a></li>
-                                                <li><a href="#">50</a></li>
-                                              </ul>
-                                              <ul class="link-check">
-                                                <li><span>Order</span></li>
-                                                <li class="active">
-                                                  <a href="#">DESC</a>
-                                                </li>
-                                                <li><a href="#">ASC</a></li>
-                                              </ul>
-                                            </div>
-                                          </div>
-                                        </li>
-                                      </ul>
-                                    </div>
-                                  </div>
-                                </li>
-                              </ul>
-                            </div>
-                          </div>
-                          <div
-                            class="card-search search-wrap"
-                            data-search="search"
-                          >
-                            <div class="card-body">
-                              <div class="search-content">
-                                <a
-                                  href="#"
-                                  class="search-back btn btn-icon toggle-search"
-                                  data-target="search"
-                                  ><em class="icon ni ni-arrow-left"></em></a
-                                ><input
-                                  type="text"
-                                  class="form-control border-transparent form-focus-none"
-                                  placeholder="Search by room no or type"
-                                /><button class="search-submit btn btn-icon">
-                                  <em class="icon ni ni-search"></em>
-                                </button>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="card-inner p-0">
-                          <div class="nk-tb-list nk-tb-ulist">
-                            <div class="nk-tb-item nk-tb-head">
-                              <div class="nk-tb-col nk-tb-col-check">
-                                <div
-                                  class="custom-control custom-control-sm custom-checkbox notext"
-                                >
-                                  <input
-                                    type="checkbox"
-                                    class="custom-control-input"
-                                    id="uid"
-                                  /><label
-                                    class="custom-control-label"
-                                    for="uid"
-                                  ></label>
-                                </div>
-                              </div>
-                              <div class="nk-tb-col">
-                                <span class="sub-text">Room No.</span>
-                              </div>
-                              <div class="nk-tb-col">
-                                <span class="sub-text">Room Type</span>
-                              </div>
-                              <div class="nk-tb-col tb-col-md">
-                                <span class="sub-text">AC/Non AC</span>
-                              </div>
-                              <div class="nk-tb-col tb-col-lg">
-                                <span class="sub-text">Meal</span>
-                              </div>
-                              <div class="nk-tb-col tb-col-lg">
-                                <span class="sub-text">Bed Capacity</span>
-                              </div>
-                              <div class="nk-tb-col tb-col-mb">
-                                <span class="sub-text">Rent</span>
-                              </div>
-                              <div class="nk-tb-col tb-col-md">
-                                <span class="sub-text">Status</span>
-                              </div>
-                              <div class="nk-tb-col nk-tb-col-tools text-end">
-                                <div class="dropdown">
-                                  <a
-                                    href="#"
-                                    class="btn btn-xs btn-outline-light btn-icon dropdown-toggle"
-                                    data-bs-toggle="dropdown"
-                                    data-offset="0,5"
-                                    ><em class="icon ni ni-plus"></em
-                                  ></a>
-                                  <div
-                                    class="dropdown-menu dropdown-menu-xs dropdown-menu-end"
-                                  >
-                                    <ul class="link-tidy sm no-bdr">
-                                      <li>
-                                        <div
-                                          class="custom-control custom-control-sm custom-checkbox"
-                                        >
-                                          <input
-                                            type="checkbox"
-                                            class="custom-control-input"
-                                            checked=""
-                                            id="bo"
-                                          /><label
-                                            class="custom-control-label"
-                                            for="bo"
-                                            >Booked</label
-                                          >
-                                        </div>
-                                      </li>
-                                      <li>
-                                        <div
-                                          class="custom-control custom-control-sm custom-checkbox"
-                                        >
-                                          <input
-                                            type="checkbox"
-                                            class="custom-control-input"
-                                            checked=""
-                                            id="open"
-                                          /><label
-                                            class="custom-control-label"
-                                            for="open"
-                                            >Open</label
-                                          >
-                                        </div>
-                                      </li>
-                                      <li>
-                                        <div
-                                          class="custom-control custom-control-sm custom-checkbox"
-                                        >
-                                          <input
-                                            type="checkbox"
-                                            class="custom-control-input"
-                                            id="inac"
-                                          /><label
-                                            class="custom-control-label"
-                                            for="inac"
-                                            >Inactive</label
-                                          >
-                                        </div>
-                                      </li>
-                                    </ul>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                            <div class="nk-tb-item">
-                              <div class="nk-tb-col nk-tb-col-check">
-                                <div
-                                  class="custom-control custom-control-sm custom-checkbox notext"
-                                >
-                                  <input
-                                    type="checkbox"
-                                    class="custom-control-input"
-                                    id="uid1"
-                                  /><label
-                                    class="custom-control-label"
-                                    for="uid1"
-                                  ></label>
-                                </div>
-                              </div>
-                              <div class="nk-tb-col">
-                                <span class="text-primary">101</span>
-                              </div>
-                              <div class="nk-tb-col">
-                                <span
-                                  >Single
-                                  <span
-                                    class="dot dot-primary d-md-none ms-1"
-                                  ></span
-                                ></span>
-                              </div>
-                              <div class="nk-tb-col tb-col-md">
-                                <span>AC</span>
-                              </div>
-                              <div class="nk-tb-col tb-col-lg">
-                                <span>None</span>
-                              </div>
-                              <div class="nk-tb-col tb-col-lg">
-                                <span>1</span>
-                              </div>
-                              <div class="nk-tb-col tb-col-mb">
-                                <span class="tb-amount"
-                                  >32.00 <span class="currency">USD</span></span
-                                >
-                              </div>
-                              <div class="nk-tb-col tb-col-md">
-                                <span class="tb-status text-primary"
-                                  >Booked</span
-                                >
-                              </div>
-                              <div class="nk-tb-col nk-tb-col-tools">
-                                <ul class="nk-tb-actions gx-1">
-                                  <li>
-                                    <div class="drodown">
-                                      <a
-                                        href="#"
-                                        class="dropdown-toggle btn btn-icon btn-trigger"
-                                        data-bs-toggle="dropdown"
-                                        ><em class="icon ni ni-more-h"></em
-                                      ></a>
-                                      <div
-                                        class="dropdown-menu dropdown-menu-end"
-                                      >
-                                        <ul class="link-list-opt no-bdr">
-                                          <li>
-                                            <a
-                                              data-bs-toggle="modal"
-                                              href="#edit-room"
-                                              ><em class="icon ni ni-edit"></em
-                                              ><span>Edit</span></a
-                                            >
-                                          </li>
-                                          <li>
-                                            <a href="#"
-                                              ><em class="icon ni ni-trash"></em
-                                              ><span>Delete</span></a
-                                            >
-                                          </li>
-                                        </ul>
-                                      </div>
-                                    </div>
-                                  </li>
-                                </ul>
-                              </div>
-                            </div>
-
-                          </div>
-                        </div>
-                        <div class="card-inner">
-                          <div class="nk-block-between-md g-3">
-                            <div class="g">
-                              <ul
-                                class="pagination justify-content-center justify-content-md-start"
-                              >
-                                <li class="page-item">
-                                  <a class="page-link" href="#">Prev</a>
-                                </li>
-                                <li class="page-item">
-                                  <a class="page-link" href="#">1</a>
-                                </li>
-                                <li class="page-item">
-                                  <a class="page-link" href="#">2</a>
-                                </li>
-                                <li class="page-item">
-                                  <span class="page-link"
-                                    ><em class="icon ni ni-more-h"></em
-                                  ></span>
-                                </li>
-                                <li class="page-item">
-                                  <a class="page-link" href="#">6</a>
-                                </li>
-                                <li class="page-item">
-                                  <a class="page-link" href="#">7</a>
-                                </li>
-                                <li class="page-item">
-                                  <a class="page-link" href="#">Next</a>
-                                </li>
-                              </ul>
-                            </div>
-                            <div class="g">
-                              <div
-                                class="pagination-goto d-flex justify-content-center justify-content-md-start gx-3"
-                              >
-                                <div>Page</div>
-                                <div>
-                                  <select
-                                    class="form-select js-select2"
-                                    data-search="on"
-                                    data-dropdown="xs center"
-                                  >
-                                    <option value="page-1">1</option>
-                                    <option value="page-2">2</option>
-                                    <option value="page-4">4</option>
-                                    <option value="page-5">5</option>
-                                    <option value="page-6">6</option>
-                                    <option value="page-7">7</option>
-                                    <option value="page-8">8</option>
-                                    <option value="page-9">9</option>
-                                    <option value="page-10">10</option>
-                                    <option value="page-11">11</option>
-                                    <option value="page-12">12</option>
-                                    <option value="page-13">13</option>
-                                    <option value="page-14">14</option>
-                                    <option value="page-15">15</option>
-                                    <option value="page-16">16</option>
-                                    <option value="page-17">17</option>
-                                    <option value="page-18">18</option>
-                                    <option value="page-19">19</option>
-                                    <option value="page-20">20</option>
-                                  </select>
-                                </div>
-                                <div>OF 102</div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
+                  <div class="card-inner">
+                    <div class="nk-block-between-md g-3">
+                      <div class="g">
+                        <ul class="pagination justify-content-center justify-content-md-start">
+                          <!-- Pagination controls if needed -->
+                        </ul>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
+            <div v-if="showForm">
+              <h5 class="text-center">{{ formMode === 'add' ? 'ເພີ່ມຂໍ້ມູນຫ້ອງ' : 'ແກ້ໄຂ ຂໍ້ມູນຫ້ອງ' }}</h5>
+              <form @submit.prevent="formMode === 'add' ? addRoom() : updateRoom()">
+                <div class="mb-3">
+                  <label for="roomNumber" class="form-label">ເບີຫ້ອງ</label>
+                  <input type="text" class="form-control" v-model="form.room_number" required>
+                  <div v-if="errors.room_number" class="text-danger">{{ errors.room_number[0] }}</div>
+                </div>
+                <div class="mb-3">
+                  <label for="roomtypeId" class="form-label">ລະຫັດປະເພດຫ້ອງ</label>
+                  <input type="number" class="form-control" v-model="form.roomtype_id" required>
+                  <div v-if="errors.roomtype_id" class="text-danger">{{ errors.roomtype_id[0] }}</div>
+                </div>
+                <div class="mb-3">
+                  <label for="status" class="form-label">ສະຖານະຫ້ອງ</label>
+                  <select id="status" class="select2 form-select" v-model="form.status">
+                    <option value="ຫວ່າງ">ຫວ່າງ</option>
+                    <option value="ບໍ່ຫວ່າງ">ບໍ່ຫວ່າງ</option>
+                    <option value="ຈອງແລ້ວ">ຈອງແລ້ວ</option>
+                  </select>
+                  <div v-if="errors.status" class="text-danger">{{ errors.status[0] }}</div>
+                </div>
+                <button type="submit" class="btn btn-success me-2">{{ formMode === 'add' ? 'ບັນທຶກ' : 'ແກ້ໄຂ' }}</button>
+                <button type="button" class="btn btn-danger" @click="toggleForm()">ຍົກເລີກ</button>
+              </form>
+            </div>
           </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-export default {
-  name: 'LaravelVue3Rooms',
+import axios from 'axios';
 
+export default {
   data() {
     return {
-      
+      rooms: [],
+      showForm: false,
+      formMode: 'add', // or 'edit'
+      form: {
+        id: null,
+        room_number: '',
+        roomtype_id: null,
+        status: '',
+      },
+      search: '',
+      errors: {},
     };
   },
-
   mounted() {
-    
+    this.fetchRooms();
   },
-
   methods: {
-    
+    fetchRooms() {
+      axios.get('/api/rooms', { params: { search: this.search } })
+        .then(response => {
+          this.rooms = response.data;
+        })
+        .catch(error => {
+          console.error('Error fetching rooms:', error);
+        });
+    },
+    toggleForm(mode, room = null) {
+      this.showForm = !this.showForm;
+      this.formMode = mode;
+      if (room) {
+        this.form = { ...room };
+      } else {
+        this.form = {
+          id: null,
+          room_number: '',
+          roomtype_id: null,
+          status: '',
+        };
+      }
+      this.errors = {};
+    },
+    addRoom() {
+      axios.post('/api/rooms', this.form)
+        .then(response => {
+          alert(response.data.message);
+          this.fetchRooms();
+          this.toggleForm();
+        })
+        .catch(error => {
+          if (error.response && error.response.data.errors) {
+            this.errors = error.response.data.errors;
+          } else {
+            alert('Failed to add room. Please try again.');
+          }
+        });
+    },
+    updateRoom() {
+      if (this.form.id) {
+        axios.put(`/api/rooms/${this.form.id}`, this.form)
+          .then(response => {
+            alert(response.data.message);
+            this.fetchRooms();
+            this.toggleForm();
+          })
+          .catch(error => {
+            if (error.response && error.response.data.errors) {
+              this.errors = error.response.data.errors;
+            } else {
+              alert('Failed to update room. Please try again.');
+            }
+          });
+      } else {
+        console.error('Room ID is missing for update.');
+      }
+    },
+    deleteRoom(id) {
+      axios.delete(`/api/rooms/${id}`)
+        .then(() => {
+          this.fetchRooms();
+          alert('Room deleted successfully!');
+        })
+        .catch(error => {
+          console.error('Error deleting room:', error);
+          alert('Failed to delete room. Please try again.');
+        });
+    },
   },
 };
 </script>
+
+<style scoped>
+/* General styles */
+.nk-content {
+  padding: 20px;
+}
+
+/* Table styles */
+.nk-tb-list {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+.nk-tb-head {
+  background-color: #f8f9fa;
+}
+
+.nk-tb-col {
+  padding: 10px;
+  text-align: left;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.nk-tb-col-actions {
+  text-align: center;
+}
+
+/* Form styles */
+form {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #ffffff;
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+}
+
+.form-label {
+  font-weight: 500;
+}
+
+.form-control {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+}
+
+.btn {
+  padding: 10px 20px;
+  border-radius: 4px;
+}
+
+/* Error message styles */
+.text-danger {
+  color: #dc3545;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .nk-tb-col {
+    font-size: 14px;
+    padding: 8px;
+  }
+
+  form {
+    padding: 10px;
+  }
+}
+</style>

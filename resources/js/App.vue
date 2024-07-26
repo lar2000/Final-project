@@ -10,12 +10,12 @@
     <div class="layout-page">
       <!-- BEGIN: Navbar-->
             <!-- Navbar -->
-<nav class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme" id="layout-navbar">
+      <nav class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme" id="layout-navbar">
     
       <!--  Brand demo (display only for navbar-full and hide on below xl) -->
       
       <!-- ! Not required for layout-without-menu -->
-            <div class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0  d-xl-none ">
+      <div class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0  d-xl-none ">
         <a class="nav-item nav-link px-0 me-xl-4" href="javascript:void(0)">
           <i class="bx bx-menu bx-sm"></i>
         </a>
@@ -34,10 +34,10 @@
 
           <!-- Place this tag where you want the button to render. -->
           <li class="menu-item ">
-    <router-link to="/Notification" class="icon-link">
+      <router-link to="/Notification" class="icon-link">
       <i class='menu-icon bx bx-bell' type='sold'></i>
             </router-link>
-  </li>
+      </li>
 
           <!-- User -->
           <li class="nav-item navbar-dropdown dropdown-user dropdown">
@@ -73,21 +73,7 @@
                   
                 </a>
               </li>
-              <li>
-                <a class="dropdown-item" href="javascript:void(0);">
-                  <i class='bx bx-cog me-2'></i>
-                  <span class="align-middle">Settings</span>
-                </a>
-              </li>
-              <li>
-                <a class="dropdown-item" href="javascript:void(0);">
-                  <span class="d-flex align-items-center align-middle">
-                    <i class="flex-shrink-0 bx bx-credit-card me-2 pe-1"></i>
-                    <span class="flex-grow-1 align-middle">Billing</span>
-                    <span class="flex-shrink-0 badge badge-center rounded-pill bg-danger w-px-20 h-px-20">4</span>
-                  </span>
-                </a>
-              </li>
+             
               <li>
                 <div class="dropdown-divider"></div>
               </li>
@@ -105,7 +91,7 @@
       </div>
 
         </nav>
-  <!-- / Navbar -->
+      <!-- / Navbar -->
             <!-- END: Navbar-->
       <!-- Content wrapper -->
       <div class="content-wrapper">
@@ -158,6 +144,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+/* Adjust layout when sidebar is collapsed */
 .layout-page {
   margin-left: 240px; /* Adjust to match sidebar width */
 }
@@ -165,6 +152,11 @@ export default {
 @media (max-width: 1199.98px) {
   .layout-page {
     margin-left: 0; /* Reset margin for smaller screens */
+  }
+
+  /* Hide sidebar when collapsed */
+  .layout-wrapper.collapsed .layout-page {
+    margin-left: 0;
   }
 }
 </style>

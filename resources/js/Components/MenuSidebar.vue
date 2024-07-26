@@ -8,6 +8,12 @@
     </div>
     <div>
       <ul class="menu-inner py-1"> 
+        <li class="menu-item" :class="[MainMenu5]">
+          <router-link to="/Home" class="menu-link">
+            <i class='menu-icon bx bx-home'></i>
+            <div>Home</div>
+          </router-link>
+        </li>
         <li class="menu-item" :class="[MainMenu1, MainM1]">
           <a href="javascript:void(0);" class="menu-link menu-toggle" @click="toggleMenu('MainMenu1')">
             <i class='menu-icon bx bx-list-ul'></i>
@@ -20,17 +26,17 @@
               </router-link>
             </li>
             <li class="menu-item" :class="SubM1_02">
-              <router-link to="/checkout" class="menu-link" @click="activateSubmenu('MainM1', 2)">
+              <router-link to="/Customers" class="menu-link" @click="activateSubmenu('MainM1', 2)">
                 <div>ລູກຄ້າ</div>
               </router-link>
             </li>
             <li class="menu-item" :class="SubM1_03">
-              <router-link to="/checkout" class="menu-link" @click="activateSubmenu('MainM1', 3)">
+              <router-link to="/Rooms" class="menu-link" @click="activateSubmenu('MainM1', 3)">
                 <div>ຫ້ອງ</div>
               </router-link>
             </li>
             <li class="menu-item" :class="SubM1_04">
-              <router-link to="/checkout" class="menu-link" @click="activateSubmenu('MainM1', 4)">
+              <router-link to="/RoomType" class="menu-link" @click="activateSubmenu('MainM1', 4)">
                 <div class="text-truncate">ປະເພດຫ້ອງ ແລະ ລາຄາ</div>
               </router-link>
             </li>

@@ -3,12 +3,14 @@ import { createWebHistory, createRouter } from "vue-router";
 import Home from  '../Pages/Home.vue';
 import Users from '../Pages/Users/Users.vue';
 import Add_User from '../Pages/Users/Add_User.vue';
-import Customers from '../Pages/Customers/Customers.vue';
+import Edit_User from '../Pages/Users/Edit_User.vue';
+import Customers from '../Pages/Customers.vue';
 import Login from  '../Pages/Login.vue';
 import Add_Booking from  '../Pages/Booking/Add_Booking.vue';
 import All_Booking from  '../Pages/Booking/All_Booking.vue';
 import Edit_Booking from  '../Pages/Booking/Edit_Booking.vue';
 import Rooms from  '../Pages/Rooms/Rooms.vue';
+import RoomType from  '../Pages/Rooms/RoomType.vue';
 import checkin from  '../Pages/Check-in-out/check-in.vue';
 import checkout from  '../Pages/Check-in-out/check-out.vue';
 import Payment from  '../Pages/Payment.vue';
@@ -16,7 +18,6 @@ import Expenses from  '../Pages/Expenses.vue';
 import Nofitication from  '../Pages/Notification.vue';
 import Register from  '../Pages/Register.vue';
 import Report from  '../Pages/Report.vue';
-import Customers_add from "../Pages/Customers/Customers_add.vue";
 
 export const routes = [
     {
@@ -36,12 +37,6 @@ export const routes = [
 
     },
     {
-        name: 'Customers_add',
-        path: '/Customers_add',
-        component: Customers_add
-
-    },
-    {
         name: 'Users',
         path: '/Users',
         component: Users
@@ -54,9 +49,21 @@ export const routes = [
 
     },
     {
+        name: 'Edit_User',
+        path: '/Edit_User/:id',
+        component: Edit_User
+
+    },
+    {
         name: 'Rooms',
         path: '/Rooms',
         component: Rooms
+
+    },
+    {
+        name: 'RoomType',
+        path: '/RoomType',
+        component: RoomType
 
     },
     {

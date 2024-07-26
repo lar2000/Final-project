@@ -53,7 +53,7 @@
                         <tr v-for="user in users" :key="user.id" class="nk-tb-item">
                           <td class="nk-tb-col">{{ user.user_id }}</td>
                           <td class="nk-tb-col">
-                            <img :src="`/storage/${user._path}`" alt="Avatar" class="rounded-circle" height="50" width="50">
+                            <img :src="getImageUrl(user.profile_path)" alt="Avatar" class="rounded-circle" height="50" width="50">
                           </td>
                           <td class="nk-tb-col">{{ user.firstName }}</td>
                           <td class="nk-tb-col">{{ user.lastName }}</td>
@@ -64,30 +64,36 @@
                             <div class="nk-tb-col nk-tb-col-tools">
                               <ul class="nk-tb-actions gx-1">
                                 <li>
-                                   <div class="drodown"><a href="#"
-                                    class="dropdown-toggle btn btn-icon btn-trigger"
-                                    data-bs-toggle="dropdown">
-                                    <i class='bx bx-dots-horizontal' ></i></a>
+                                  <div class="drodown">
+                                    <a href="#"
+                                       class="dropdown-toggle btn btn-icon btn-trigger"
+                                       data-bs-toggle="dropdown">
+                                      <i class='bx bx-dots-horizontal'></i>
+                                    </a>
                                     <div class="dropdown-menu dropdown-menu-end">
-                                    <ul class="link-list-opt no-bdr">
-                                      <li>
-                                        <router-link :to="'Edit_Booking' + user.id">
-                                          <i class='menu-icon bx bxs-edit-alt'></i>
+                                      <ul class="link-list-opt no-bdr">
+                                        <li>
+                                          <router-link :to="`/Edit_User/${user.id}`">
+                                            <i class='menu-icon bx bxs-edit-alt'></i>
                                             <span>ແກ້ໄຂ</span>
-                                        </router-link>
-                                      </li>
-                                    <li><a @click="deleteUser(user.id)" ><i class='menu-icon bx bxs-trash' ></i>
-                                            <span>ລຶບ</span></a></li>
-                                    </ul>
-                                   </div>
-                                 </div>
-                                 </li>
-                                 </ul>
-                                </div>                             
+                                          </router-link>
+                                        </li>
+                                        <li>
+                                          <a @click="deleteUser(user.id)">
+                                            <i class='menu-icon bx bxs-trash'></i>
+                                            <span>ລຶບ</span>
+                                          </a>
+                                        </li>
+                                      </ul>
+                                    </div>
+                                  </div>
+                                </li>
+                              </ul>
+                            </div>
                           </td>
                         </tr>
                         <tr v-if="users.length === 0">
-                          <td colspan="7" class="text-center">No users found</td>
+                          <td colspan="8" class="text-center">No users found</td>
                         </tr>
                       </tbody>
                     </table>
@@ -115,34 +121,34 @@
 import axios from 'axios';
 
 export default {
-  name: 'LaravelVue3CustomersAdd',
+  name: 'UserList',
   data() {
     return {
-      users: [], // Array to hold fetched users
-      Search: '' // Search input field (if needed)
+      users: [],
+      Search: ''
     };
   },
   methods: {
+    getImageUrl(imagePath) {
+      return `/storage/${imagePath}`;
+    },
     fetchUsers() {
       axios.get('/api/users', {
-          params: {
-            search: this.Search // Optional: send search query param
-          }
-        })
-        .then(response => {
-          this.users = response.data.users;
-        })
-        .catch(error => {
-          console.error('Error fetching users:', error);
-          // Handle error fetching users
-        });
+        params: { search: this.Search }
+      })
+      .then(response => {
+        this.users = response.data.users;
+      })
+      .catch(error => {
+        console.error('Error fetching users:', error);
+      });
     },
     deleteUser(userId) {
       if (confirm('Are you sure you want to delete this user?')) {
         axios.delete(`/api/users/${userId}`)
           .then(response => {
             if (response.data.message) {
-              this.users = this.users.filter(user => user.id !== userId); // Remove deleted user from the list
+              this.users = this.users.filter(user => user.id !== userId);
               alert('User deleted successfully!');
             } else {
               alert('Failed to delete user.');
@@ -156,11 +162,17 @@ export default {
     }
   },
   mounted() {
-    this.fetchUsers(); // Fetch users when the component mounts
+    this.fetchUsers();
   }
 };
 </script>
 
 <style scoped>
 /* Add any scoped styles here */
+@media (max-width: 768px) {
+  .nk-tb-col {
+    font-size: 14px;
+    padding: 8px;
+  }
+}
 </style>

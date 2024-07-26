@@ -9,17 +9,17 @@ class CreateRoomsTable extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
+    public function up()
     {
         Schema::create('rooms', function (Blueprint $table) {
+            $table->id();
             $table->string('room_number');
             $table->integer('roomtype_id');
-            $table->enum('status', ['ຈອງແລ້ວ', 'ບໍ່ຫວ່າງ', 'ຫວ່າງ'])->change();
+            $table->string('status');
             $table->timestamps();
-
         });
     }
-
+    
     /**
      * Reverse the migrations.
      */

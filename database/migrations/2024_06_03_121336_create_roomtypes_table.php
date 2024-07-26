@@ -12,9 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('roomtypes', function (Blueprint $table) {
-            $table->integer('roomtype_id');
-            $table->string('roomtype_name',25);
-            $table->integer('room_price',20);
+            $table->id();
+            $table->integer('roomtype_id')->unique();
+            $table->string('roomtype_name', 255);
+            $table->integer('room_price');
             $table->timestamps();
         });
     }

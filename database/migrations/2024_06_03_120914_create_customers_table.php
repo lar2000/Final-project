@@ -13,11 +13,10 @@ class CreateCustomersTable extends Migration
     {
         Schema::create('customers', function (Blueprint $table) {
             $table->id('cust_id'); // Changed to bigIncrements
-            $table->string('name', 20);
-            $table->string('surname', 20);
+            $table->string('firstName', 20);
+            $table->string('lastName', 20);
             $table->string('gender', 10);
-            $table->string('tell', 20); // Changed to string for phone number
-            $table->string('address', 200); // Corrected column name to 'address'
+            $table->string('phoneNumber', 20); // Changed to string for phone number// Corrected column name to 'address'
             $table->timestamps();
         });
     }
