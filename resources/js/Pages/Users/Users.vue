@@ -79,7 +79,7 @@
                                           </router-link>
                                         </li>
                                         <li>
-                                          <a @click="deleteUser(user.id)">
+                                          <a href="#" @click="deleteUser(user.id)">
                                             <i class='menu-icon bx bxs-trash'></i>
                                             <span>ລຶບ</span>
                                           </a>

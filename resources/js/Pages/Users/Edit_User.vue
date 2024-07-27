@@ -125,30 +125,33 @@ export default {
       this.uploadimg = this.defaultImage; // Reset to default image
     },
     saveChanges() {
-      if (!this.validateForm()) {
+      if (!this.form.user_id) {
+        alert('User ID is missing');
         return;
       }
 
-      let formData = new FormData();
-      Object.keys(this.form).forEach(key => {
-        if (this.form[key]) {
-          formData.append(key, this.form[key]);
-        }
-      });
+      const formData = new FormData();
+      for (const key in this.form) {
+        formData.append(key, this.form[key]);
+      }
 
-      axios.put(`/api/users/${this.form.user_id}`, formData)
-        .then(response => {
-          if (response.data.success) {
-            alert('User updated successfully!');
-            this.$router.push('/Users');
-          } else {
-            alert('Failed to update user.');
-          }
-        })
-        .catch(error => {
-          console.error('Error updating user:', error);
-          alert('Failed to update user. Please try again later.');
-        });
+      axios.put(`/api/users/${this.form.user_id}`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      })
+      .then(response => {
+        if (response.data.success) {
+          alert('User updated successfully!');
+          this.$router.push('/Users');
+        } else {
+          alert('Failed to update user.');
+        }
+      })
+      .catch(error => {
+        console.error('Error updating user:', error);
+        alert('Failed to update user. Please try again later.');
+      });
     },
     validateForm() {
       let isValid = true;

@@ -48,8 +48,8 @@
                         </tr>
                       </thead>
                       <tbody>
-                        <tr v-for="customer in customers" :key="customer.cust_id" class="nk-tb-item">
-                          <td class="nk-tb-col">{{ customer.cust_id }}</td>
+                        <tr v-for="customer in customers" :key="customer.id" class="nk-tb-item">
+                          <td class="nk-tb-col">{{ customer.id }}</td>
                           <td class="nk-tb-col">{{ customer.firstName }}</td>
                           <td class="nk-tb-col">{{ customer.lastName }}</td>
                           <td class="nk-tb-col">{{ customer.gender }}</td>
@@ -68,7 +68,7 @@
                                     </a>
                                   </li>
                                   <li>
-                                    <a href="#" @click="deleteCustomer(customer.cust_id)">
+                                    <a href="#" @click="deleteCustomer(customer.id)">
                                       <i class="menu-icon bx bxs-trash"></i>
                                       <span>Delete</span>
                                     </a>
@@ -129,9 +129,6 @@
                   <button type="button" class="btn btn-danger" @click="toggleForm()">Cancel</button>
                 </div>
               </form>
-              <div v-if="apiError" class="alert alert-danger mt-3">
-                {{ apiError }}
-              </div>
             </div>
           </div>
         </div>
@@ -144,103 +141,89 @@
 import axios from 'axios';
 
 export default {
-  name: 'CustomerManagement',
   data() {
     return {
-      customers: [],
-      showForm: false,
-      formMode: 'add',
+      customers: [], // To store the list of customers
+      showForm: false, // To toggle form visibility
+      formMode: 'add', // To determine whether the form is in add or edit mode
       form: {
-        cust_id: null,
         firstName: '',
         lastName: '',
-        gender: '',
+        gender: 'select',
         phoneNumber: ''
       },
-      search: '',
       errors: {},
-      apiError: null,
+      apiError: '',
+      search: ''
     };
   },
   methods: {
-    fetchCustomers() {
-      axios.get('/api/customers', { params: { search: this.search } })
-        .then(response => {
-          this.customers = response.data;
-        })
-        .catch(error => {
-          console.error('Error fetching customers:', error);
-          this.apiError = 'Failed to fetch customers.';
+    async fetchCustomers() {
+      try {
+        const response = await axios.get('/api/customers', {
+          params: { search: this.search }
         });
+        this.customers = response.data;
+      } catch (error) {
+        this.apiError = 'Error fetching customers';
+      }
     },
     toggleForm(mode = 'add', customer = null) {
       this.showForm = !this.showForm;
       this.formMode = mode;
-      if (customer) {
+      if (mode === 'edit' && customer) {
         this.form = { ...customer };
       } else {
         this.form = {
-          cust_id: null,
           firstName: '',
           lastName: '',
-          gender: '',
+          gender: 'select',
           phoneNumber: ''
         };
       }
       this.errors = {};
-      this.apiError = null;
     },
-    addCustomer() {
-      axios.post('/api/customers', this.form)
-        .then(response => {
-          this.fetchCustomers();
-          alert('Customer added successfully!');
-          this.toggleForm();
-        })
-        .catch(error => {
-          if (error.response && error.response.data.errors) {
-            this.errors = error.response.data.errors;
-          } else {
-            this.apiError = 'Failed to add customer.';
-          }
-        });
-    },
-    updateCustomer() {
-      if (this.form.cust_id) {
-        axios.put(`/api/customers/${this.form.cust_id}`, this.form)
-          .then(response => {
-            alert(response.data.message);
-            this.fetchCustomers();
-            this.toggleForm();
-          })
-          .catch(error => {
-            if (error.response && error.response.data.errors) {
-              this.errors = error.response.data.errors;
-            } else {
-              alert('Failed to update customer.')
-            }
-          });
+    async addCustomer() {
+      try {
+        await axios.post('/api/customers', this.form);
+        this.fetchCustomers();
+        this.toggleForm();
+      } catch (error) {
+        this.errors = error.response.data.errors || {};
+        alert('Error adding customer');
       }
     },
-    deleteCustomer(id) {
-      if (confirm('Are you sure you want to delete this customer?')) {
-        axios.delete(`/api/customers/${id}`)
-          .then(() => {
-            this.fetchCustomers();
-            alert('Customer deleted successfully!');
-          })
-          .catch(error => {
-            console.error('Error deleting customer:', error);
-            this.apiError = 'Failed to delete customer.';
-          });
+    async updateCustomer() {
+  try {
+    if (!this.form.id) {
+      throw new Error('Customer ID is missing');
+    }
+    await axios.put(`/api/customers/${this.form.id}`, this.form);
+    this.fetchCustomers();
+    alert('Updating customer successfully!');
+    this.toggleForm();
+  } catch (error) {
+    this.errors = error.response?.data.errors || {};
+    alert('Error updating customer');
+  }
+}
+,
+    async deleteCustomer(id) {
+      try {
+        await axios.delete(`/api/customers/${id}`);
+        alert('Deleted')
+        this.fetchCustomers();
+      } catch (error) {
+        alert('Error deleting customer');
       }
     }
   },
-  created() {
+  mounted() {
     this.fetchCustomers();
   }
 };
 </script>
+
 
 <style scoped>
 /* General styles */

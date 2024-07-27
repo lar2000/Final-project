@@ -117,7 +117,7 @@
         </div>
       </div>
     </div>
-  </template>
+</template>
   
   <script>
   import axios from 'axios';
@@ -201,7 +201,6 @@
         }
       },
       deleteRoomT(id) {
-      console.log('Deleting roomtype with id:', id); // Debugging line
       axios.delete(`/api/roomtypes/${id}`)
         .then(() => {
           this.fetchRoomTypes();

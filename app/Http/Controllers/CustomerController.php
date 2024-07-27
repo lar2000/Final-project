@@ -4,74 +4,88 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Customer;
-use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Validator;
 
 class CustomerController extends Controller
 {
-    public function index(Request $request): JsonResponse
+    public function index(Request $request)
     {
-        try {
-            $search = $request->query('search');
-            $customers = Customer::query()
-                ->when($search, function ($query) use ($search) {
-                    $query->where('cust_id', 'like', "%{$search}%");
-                })
-                ->get();
+        $search = $request->input('search');
+        $query = Customer::query();
 
-            return response()->json($customers);
-        } catch (\Exception $e) {
-            return response()->json(['error' => 'Unable to fetch customers.'], 500);
+        if ($search) {
+            $query->where('firstName', 'like', "%{$search}%")
+                  ->orWhere('lastName', 'like', "%{$search}%");
         }
+
+        return response()->json($query->get());
     }
 
-    public function store(Request $request): JsonResponse
+    public function store(Request $request)
     {
-        $validated = $request->validate([
-            'cust_id' => 'required|integer|max:10|unique:customers,cust_id',
-            'firstName' => 'required|string',
-            'lastName' => 'required|string',
-            'gender' => 'required|string',
-            'phoneNumber' => 'required|integer',
+        $validator = Validator::make($request->all(), [
+            'firstName' => 'required|string|max:255',
+            'lastName' => 'required|string|max:255',
+            'gender' => 'required|in:ຊາຍ,ຍິງ,ອື່ນໆ',
+            'phoneNumber' => 'required|string|max:20',
         ]);
 
-        try {
-            $customer = Customer::create($validated);
-            return response()->json(['message' => 'Customer added successfully!', 'customer' => $customer], 201);
-        } catch (\Exception $e) {
-            return response()->json(['error' => 'Unable to add customer.'], 500);
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
         }
+
+        $customer = Customer::create($request->all());
+
+        return response()->json($customer, 201);
     }
 
-    public function show(Customer $customer): JsonResponse
+    public function show($id)
     {
+        $customer = Customer::find($id);
+
+        if (!$customer) {
+            return response()->json(['message' => 'Customer not found'], 404);
+        }
+
         return response()->json($customer);
     }
 
-    public function update(Request $request, Customer $customer): JsonResponse
-    {
-        $validated = $request->validate([
-            'cust_id' => 'required|integer|max:10|unique:customers,cust_id,' . $customer->id,
-            'firstName' => 'required|string',
-            'lastName' => 'required|string',
-            'gender' => 'required|string',
-            'phoneNumber' => 'required|integer',
-        ]);
+    public function update(Request $request, $id)
+{
+    $validator = Validator::make($request->all(), [
+        'firstName' => 'required|string|max:255',
+        'lastName' => 'required|string|max:255',
+        'gender' => 'required|in:ຊາຍ,ຍິງ,ອື່ນໆ',
+        'phoneNumber' => 'required|string|max:20',
+    ]);
 
-        try {
-            $customer->update($validated);
-            return response()->json(['message' => 'Customer updated successfully!', 'customer' => $customer]);
-        } catch (\Exception $e) {
-            return response()->json(['error' => 'Unable to update customer.'], 500);
-        }
+    if ($validator->fails()) {
+        return response()->json(['errors' => $validator->errors()], 422);
     }
 
-    public function destroy(Customer $customer): JsonResponse
-    {
-        try {
-            $customer->delete();
-            return response()->json(null, 204);
-        } catch (\Exception $e) {
-            return response()->json(['error' => 'Unable to delete customer.'], 500);
-        }
+    $customer = Customer::find($id);
+
+    if (!$customer) {
+        return response()->json(['message' => 'Customer not found'], 404);
     }
+
+    $customer->update($request->all());
+
+    return response()->json($customer);
+}
+
+
+public function destroy($id)
+{
+    $customer = Customer::find($id);
+
+    if (!$customer) {
+        return response()->json(['message' => 'Customer not found'], 404);
+    }
+
+    $customer->delete();
+
+    return response()->json(['message' => 'Customer deleted successfully']);
+}
+
 }
