@@ -48,7 +48,7 @@
                         </tr>
                       </thead>
                       <tbody>
-                        <tr v-for="customer in customers" :key="customer.id" class="nk-tb-item">
+                        <tr v-for="customer in customers" :key="customer.cust_id" class="nk-tb-item">
                           <td class="nk-tb-col">{{ customer.cust_id }}</td>
                           <td class="nk-tb-col">{{ customer.firstName }}</td>
                           <td class="nk-tb-col">{{ customer.lastName }}</td>
@@ -68,7 +68,7 @@
                                     </a>
                                   </li>
                                   <li>
-                                    <a href="#" @click="deleteCustomer(customer.id)">
+                                    <a href="#" @click="deleteCustomer(customer.cust_id)">
                                       <i class="menu-icon bx bxs-trash"></i>
                                       <span>Delete</span>
                                     </a>
@@ -102,29 +102,36 @@
                 <div class="mb-3">
                   <label for="firstName" class="form-label">First Name</label>
                   <input type="text" class="form-control" v-model="form.firstName" required>
+                  <div v-if="errors.firstName" class="text-danger">{{ errors.firstName[0] }}</div>
                 </div>
                 <div class="mb-3">
                   <label for="lastName" class="form-label">Last Name</label>
                   <input type="text" class="form-control" v-model="form.lastName" required>
+                  <div v-if="errors.lastName" class="text-danger">{{ errors.lastName[0] }}</div>
                 </div>
                 <div class="mb-3">
                   <label for="gender" class="form-label">Gender</label>
                   <select id="gender" class="select2 form-select" v-model="form.gender">
-                <option value="select">ເລືອກ</option>
-                <option value="ຊາຍ">ຊາຍ</option>
-                <option value="ຍິງ">ຍິງ</option>
-                <option value="ອື່ນໆ">ອື່ນໆ</option>
-              </select>
+                    <option value="select">ເລືອກ</option>
+                    <option value="ຊາຍ">ຊາຍ</option>
+                    <option value="ຍິງ">ຍິງ</option>
+                    <option value="ອື່ນໆ">ອື່ນໆ</option>
+                  </select>
+                  <div v-if="errors.gender" class="text-danger">{{ errors.gender[0] }}</div>
                 </div>
                 <div class="mb-3">
                   <label for="phoneNumber" class="form-label">Phone Number</label>
                   <input type="text" class="form-control" v-model="form.phoneNumber" required>
+                  <div v-if="errors.phoneNumber" class="text-danger">{{ errors.phoneNumber[0] }}</div>
                 </div>
                 <div class="mt-2">
                   <button type="submit" class="btn btn-primary me-2">{{ formMode === 'add' ? 'Add' : 'Save' }}</button>
                   <button type="button" class="btn btn-danger" @click="toggleForm()">Cancel</button>
                 </div>
               </form>
+              <div v-if="apiError" class="alert alert-danger mt-3">
+                {{ apiError }}
+              </div>
             </div>
           </div>
         </div>
@@ -144,95 +151,102 @@ export default {
       showForm: false,
       formMode: 'add',
       form: {
-        id: null,
+        cust_id: null,
         firstName: '',
         lastName: '',
         gender: '',
         phoneNumber: ''
       },
-      search: ''
+      search: '',
+      errors: {},
+      apiError: null,
     };
   },
   methods: {
-  fetchCustomers() {
-    axios.get('/api/customers')
-      .then(response => {
-        this.customers = response.data;
-      })
-      .catch(error => {
-        console.error('Error fetching customers:', error);
-      });
-  },
-  toggleForm(mode = 'add', customer = null) {
-    this.formMode = mode;
-    if (mode === 'edit' && customer) {
-      this.form = { ...customer };
-    } else {
-      this.form = {
-        id: null,
-        firstName: '',
-        lastName: '',
-        gender: '',
-        phoneNumber: ''
-      };
+    fetchCustomers() {
+      axios.get('/api/customers', { params: { search: this.search } })
+        .then(response => {
+          this.customers = response.data;
+        })
+        .catch(error => {
+          console.error('Error fetching customers:', error);
+          this.apiError = 'Failed to fetch customers.';
+        });
+    },
+    toggleForm(mode = 'add', customer = null) {
+      this.showForm = !this.showForm;
+      this.formMode = mode;
+      if (customer) {
+        this.form = { ...customer };
+      } else {
+        this.form = {
+          cust_id: null,
+          firstName: '',
+          lastName: '',
+          gender: '',
+          phoneNumber: ''
+        };
+      }
+      this.errors = {};
+      this.apiError = null;
+    },
+    addCustomer() {
+      axios.post('/api/customers', this.form)
+        .then(response => {
+          this.fetchCustomers();
+          alert('Customer added successfully!');
+          this.toggleForm();
+        })
+        .catch(error => {
+          if (error.response && error.response.data.errors) {
+            this.errors = error.response.data.errors;
+          } else {
+            this.apiError = 'Failed to add customer.';
+          }
+        });
+    },
+    updateCustomer() {
+      if (this.form.cust_id) {
+        axios.put(`/api/customers/${this.form.cust_id}`, this.form)
+          .then(response => {
+            alert(response.data.message);
+            this.fetchCustomers();
+            this.toggleForm();
+          })
+          .catch(error => {
+            if (error.response && error.response.data.errors) {
+              this.errors = error.response.data.errors;
+            } else {
+              alert('Failed to update customer.')
+            }
+          });
+      }
+    },
+    deleteCustomer(id) {
+      if (confirm('Are you sure you want to delete this customer?')) {
+        axios.delete(`/api/customers/${id}`)
+          .then(() => {
+            this.fetchCustomers();
+            alert('Customer deleted successfully!');
+          })
+          .catch(error => {
+            console.error('Error deleting customer:', error);
+            this.apiError = 'Failed to delete customer.';
+          });
+      }
     }
-    this.showForm = !this.showForm;
   },
-  addCustomer() {
-    axios.post('/api/customers', this.form)
-      .then(response => {
-        this.fetchCustomers();
-        alert('User added successfully!');
-            this.$router.push('/Customers');
-        this.toggleForm();
-      })
-      .catch(error => {
-        console.error('Error adding customer:', error);
-      });
-  },
-  updateCustomer() {
-    axios.put(`/api/customers/${this.form.id}`, this.form)
-      .then(response => {
-        this.fetchCustomers();
-        this.toggleForm();
-      })
-      .catch(error => {
-        console.error('Error updating customer:', error);
-      });
-  },
-  
-  deleteCustomer(id) {
- 
-  if (confirm('Are you sure you want to delete this customer?')) {
-    axios.delete(`/api/customers/${id}`)
-      .then(response => {
-        if (response.data.message) {
-          this.customers = this.customers.filter(customer => customer.id !== id); // Remove deleted user from the list
-          alert('Customer deleted successfully!');
-        } else {
-          alert('Error deleting customer.');
-        }
-      })
-      .catch(error => {
-        console.error('Error deleting customer:', error);
-        alert('Failed to delete customer.');
-      });
-  }
-}
-},
-  mounted() {
+  created() {
     this.fetchCustomers();
   }
 };
 </script>
-
 
 <style scoped>
 /* General styles */
 .nk-content {
   padding: 20px;
 }
-
 
 /* Table styles */
 .nk-tb-list {
@@ -260,37 +274,7 @@ form {
   max-width: 600px;
   margin: 0 auto;
   padding: 20px;
-  background-color: #ffffff;
-  border: 1px solid #dee2e6;
-  border-radius: 4px;
-}
-
-.form-label {
-  font-weight: 500;
-}
-
-.form-control {
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 10px;
-  border: 1px solid #ced4da;
-  border-radius: 4px;
-}
-
-.btn {
-  padding: 10px 20px;
-  border-radius: 4px;
-}
-
-/* Responsive styles */
-@media (max-width: 768px) {
-  .nk-tb-col {
-    font-size: 14px;
-    padding: 8px;
-  }
-
-  form {
-    padding: 10px;
-  }
+  background: #f8f9fa;
+  border-radius: 5px;
 }
 </style>

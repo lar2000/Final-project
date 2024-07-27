@@ -23,16 +23,16 @@ use App\Http\Controllers\RoomtypeController;
 Route::post('/add', [UserController::class, 'user']);
 Route::get('/users', [UserController::class, 'index']); // Fetch all users
 Route::get('/users/{id}', [UserController::class, 'show']); // Fetch a single user
-Route::put('/users/{id}', [UserController::class, 'update']); // Update a user
+Route::put('/api/users/{id}', [UserController::class, 'update']); // Update a user
 Route::delete('/users/{id}', [UserController::class, 'destroy']); // Delete a user
 
 // routes/api.php
-
 Route::get('/customers', [CustomerController::class, 'index']);
 Route::post('/customers', [CustomerController::class, 'store']);
-Route::post('/api/edit/{id}', [UserController::class, 'update']);
-Route::put('/customers/{id}', [CustomerController::class, 'update']);
-Route::delete('/customers/{id}', [CustomerController::class, 'destroy']);
+Route::get('/customers/{customer}', [CustomerController::class, 'show']);
+Route::put('/customers/{customer}', [CustomerController::class, 'update']);
+Route::delete('/customers/{customer}', [CustomerController::class, 'destroy']);
+
 // In routes/api.php
 
 Route::get('/rooms', [RoomController::class, 'index']);

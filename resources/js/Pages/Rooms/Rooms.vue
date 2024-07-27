@@ -47,7 +47,11 @@
                         <tr v-for="room in rooms" :key="room.id" class="nk-tb-item">
                           <td class="nk-tb-col">{{ room.room_number }}</td>
                           <td class="nk-tb-col">{{ room.roomtype_id }}</td>
-                          <td class="nk-tb-col">{{ room.status }}</td>
+                          <td class="nk-tb-col">
+                            <span :class="getStatusClass(room.status)">
+                              {{ room.status }}
+                            </span>
+                          </td>
                           <td class="nk-tb-col">
                             <div class="dropdown">
                               <a href="#" class="dropdown-toggle btn btn-icon btn-trigger" data-bs-toggle="dropdown">
@@ -215,78 +219,29 @@ export default {
           alert('Failed to delete room. Please try again.');
         });
     },
-  },
+    getStatusClass(status) {
+      return {
+        'text-success': status === 'ຫວ່າງ',
+        'text-warning': status === 'ບໍ່ຫວ່າງ',
+        'text-danger': status === 'ຈອງແລ້ວ'
+      };
+    }
+  }
 };
 </script>
 
 <style scoped>
-/* General styles */
-.nk-content {
-  padding: 20px;
+/* Existing styles */
+
+.text-success {
+  color: #28a745; /* Green color for success */
 }
 
-/* Table styles */
-.nk-tb-list {
-  width: 100%;
-  border-collapse: collapse;
-  margin-bottom: 20px;
+.text-warning {
+  color: #ffc107; /* Yellow color for warning */
 }
 
-.nk-tb-head {
-  background-color: #f8f9fa;
-}
-
-.nk-tb-col {
-  padding: 10px;
-  text-align: left;
-  border-bottom: 1px solid #dee2e6;
-}
-
-.nk-tb-col-actions {
-  text-align: center;
-}
-
-/* Form styles */
-form {
-  max-width: 600px;
-  margin: 0 auto;
-  padding: 20px;
-  background-color: #ffffff;
-  border: 1px solid #dee2e6;
-  border-radius: 4px;
-}
-
-.form-label {
-  font-weight: 500;
-}
-
-.form-control {
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 10px;
-  border: 1px solid #ced4da;
-  border-radius: 4px;
-}
-
-.btn {
-  padding: 10px 20px;
-  border-radius: 4px;
-}
-
-/* Error message styles */
 .text-danger {
-  color: #dc3545;
-}
-
-/* Responsive styles */
-@media (max-width: 768px) {
-  .nk-tb-col {
-    font-size: 14px;
-    padding: 8px;
-  }
-
-  form {
-    padding: 10px;
-  }
+  color: #dc3545; /* Red color for danger */
 }
 </style>

@@ -62,7 +62,7 @@
             </div>
           </div>
           <div class="mt-2">
-            <button type="submit" class="btn btn-primary me-2">ແກ້ໄຂ</button>
+            <button type="submit" class="btn btn-success me-2">ອັບເດດ</button>
             <button type="reset" class="btn btn-danger" @click="resetForm">ຍົກເລີກ</button>
           </div>
         </form>
@@ -86,10 +86,11 @@ export default {
         phoneNumber: '',
         email: '',
         password: '',
-        profile_path: null
+        profile_path: null // Store the file object directly
       },
       formErrors: {},
-      uploadimg: ''
+      uploadimg: '',
+      defaultImage: '/path/to/default/image.jpg' // Set a default image path if no image is uploaded
     };
   },
   methods: {
@@ -99,7 +100,7 @@ export default {
         .then(response => {
           if (response.data.user) {
             this.form = response.data.user;
-            this.uploadimg = `/storage/${this.form.profile_path}`;
+            this.uploadimg = `/storage/${this.form.profile_path}` || this.defaultImage;
           } else {
             alert('User not found.');
           }
@@ -121,33 +122,34 @@ export default {
     },
     resetImage() {
       this.form.profile_path = null;
-      this.uploadimg = ''; // Reset to a default image or empty
+      this.uploadimg = this.defaultImage; // Reset to default image
     },
     saveChanges() {
-    if (!this.validateForm()) {
-        return; // Stop submission if validation fails
-    }
+      if (!this.validateForm()) {
+        return;
+      }
 
-    let formData = new FormData();
-    Object.keys(this.form).forEach(key => {
-        formData.append(key, this.form[key]);
-    });
+      let formData = new FormData();
+      Object.keys(this.form).forEach(key => {
+        if (this.form[key]) {
+          formData.append(key, this.form[key]);
+        }
+      });
 
-    axios.put(`/api/users/${this.form.user_id}`, formData)
+      axios.put(`/api/users/${this.form.user_id}`, formData)
         .then(response => {
-            if (response.data.success) {
-                alert('User updated successfully!');
-                this.$router.push('/Users');
-            } else {
-                alert('Failed to update user.');
-            }
+          if (response.data.success) {
+            alert('User updated successfully!');
+            this.$router.push('/Users');
+          } else {
+            alert('Failed to update user.');
+          }
         })
         .catch(error => {
-            console.error('Error updating user:', error);
-            alert('Failed to update user.');
+          console.error('Error updating user:', error);
+          alert('Failed to update user. Please try again later.');
         });
-},
-
+    },
     validateForm() {
       let isValid = true;
       this.formErrors = {};
@@ -176,7 +178,7 @@ export default {
         this.formErrors.email = 'ກະລຸນາປ້ອນອີເມວ໌';
         isValid = false;
       }
-      if (!this.form.password.trim()) {
+      if (this.form.password.trim() === '') {
         this.formErrors.password = 'ກະລຸນາປ້ອນລະຫັດຜ່ານ';
         isValid = false;
       }
@@ -184,8 +186,19 @@ export default {
       return isValid;
     },
     resetForm() {
-     
-      this.$router.push('/Users'); // Re-fetch user data to reset the form
+      this.form = {
+        user_id: '',
+        firstName: '',
+        lastName: '',
+        gender: '',
+        phoneNumber: '',
+        email: '',
+        password: '',
+        profile_path: null
+      };
+      this.uploadimg = this.defaultImage;
+      this.formErrors = {};
+      this.$router.push('/Users'); // Redirect to users list
     }
   },
   created() {
@@ -195,5 +208,5 @@ export default {
 </script>
 
 <style scoped>
-/* Add any scoped styles here */
+/* Add your custom styles here */
 </style>

@@ -47,7 +47,7 @@
                           <tr v-for="roomtype in roomtypes" :key="roomtype.roomtype_id" class="nk-tb-item">
                             <td class="nk-tb-col">{{ roomtype.roomtype_id }}</td>
                             <td class="nk-tb-col">{{ roomtype.roomtype_name }}</td>
-                            <td class="nk-tb-col">{{ roomtype.room_price }}</td>
+                            <td class="nk-tb-col">{{ roomtype.room_price }} ກີບ</td>
                             <td class="nk-tb-col">
                               <div class="dropdown">
                                 <a href="#" class="dropdown-toggle btn btn-icon btn-trigger" data-bs-toggle="dropdown">

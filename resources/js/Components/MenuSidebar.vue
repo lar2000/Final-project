@@ -182,11 +182,5 @@ export default {
 }
 
 
-
-
-
-
-/* Optional: Add styles for icons */
-
 </style>
 

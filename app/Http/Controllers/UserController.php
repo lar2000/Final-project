@@ -25,7 +25,7 @@ class UserController extends Controller
 
     // Handle profile image upload if present
     if ($request->hasFile('profile_path')) {
-        $profilePath = $request->file('profile_path')->store('profiles');
+        $profilePath = $request->file('profile_path')->store('profiles', 'public');
         $validated['profile_path'] = $profilePath;
     }
 
@@ -59,39 +59,77 @@ class UserController extends Controller
     // Method to update a user
     // UserController.php
 
-    public function update(Request $request, $id) {
-        $validatedData = $request->validate([
-            'user_id' => 'required',
-            'firstName' => 'required|string',
-            'lastName' => 'required|string',
-            'gender' => 'required|in:ຊາຍ,ຍິງ,ອື່ນໆ', // Make sure the validation matches your options
-            'phoneNumber' => 'required|string',
-            'email' => 'required|email',
-            'password' => 'required|string',
-            'profile_path' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048' // Ensure these match your allowed formats
-        ]);
+    // public function update(Request $request, $id)
+    // {
+    //     $user = User::findOrFail($id);
     
+    //     // Validate the request
+    //     $validatedData = $request->validate([
+    //         'user_id' => 'required|string|max:255',
+    //         'firstName' => 'required|string|max:255',
+    //         'lastName' => 'required|string|max:255',
+    //         'gender' => 'required|string|max:255',
+    //         'phoneNumber' => 'required|string|max:15',
+    //         'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
+    //         'password' => 'nullable|string|min:8', // Password can be nullable for updates
+    //         'profile_path' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+    //     ]);
+    
+    //     // Handle the profile image upload
+    //     if ($request->hasFile('profile_path')) {
+    //         $imagePath = $request->file('profile_path')->store('profile_images', 'public');
+    //         $validatedData['profile_path'] = $imagePath;
+    //     }
+    
+    //     // Hash the password if provided
+    //     if (!empty($validatedData['password'])) {
+    //         $validatedData['password'] = bcrypt($validatedData['password']);
+    //     } else {
+    //         // Remove password from validated data if it's not being updated
+    //         unset($validatedData['password']);
+    //     }
+    
+    //     // Update the user
+    //     $user->update($validatedData);
+    
+    //     return response()->json(['success' => true, 'user' => $user]);
+    // }
+    
+    public function update(Request $request, $id)
+    {
         $user = User::find($id);
         if (!$user) {
-            return response()->json(['success' => false, 'message' => 'User not found.']);
+            return response()->json(['message' => 'User not found.'], 404);
         }
     
-        $user->firstName = $validatedData['firstName'];
-        $user->lastName = $validatedData['lastName'];
-        $user->gender = $validatedData['gender'];
-        $user->phoneNumber = $validatedData['phoneNumber'];
-        $user->email = $validatedData['email'];
-        $user->password = bcrypt($validatedData['password']);
-        
+        $validatedData = $request->validate([
+            'user_id' => 'required|string|max:255',
+            'firstName' => 'required|string|max:255',
+            'lastName' => 'required|string|max:255',
+            'gender' => 'required|string|max:255',
+            'phoneNumber' => 'required|string|max:15',
+            'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
+            'password' => 'nullable|string|min:8',
+            'profile_path' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+    
         if ($request->hasFile('profile_path')) {
-            $path = $request->file('profile_path')->store('public/images');
-            $user->profile_path = basename($path);
+            $imagePath = $request->file('profile_path')->store('profiles', 'public');
+            $validatedData['profile_path'] = $imagePath;
         }
     
-        $user->save();
-        return response()->json(['success' => true]);
+        if (!empty($validatedData['password'])) {
+            $validatedData['password'] = bcrypt($validatedData['password']);
+        } else {
+            unset($validatedData['password']);
+        }
+    
+        $user->update($validatedData);
+        return response()->json(['success' => true, 'user' => $user]);
     }
     
+    
+
 
 public function delete($id) {
     $user = User::find($id);
