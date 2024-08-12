@@ -213,11 +213,20 @@ export default {
 </script>
 
 <style scoped>
+/* Form styles */
+
 .form-icon-right .ni-calendar {
   position: absolute;
   right: 10px;
   top: 50%;
   transform: translateY(-50%);
   pointer-events: none;
+}
+form {
+  max-width: 950px;
+  margin: 0 auto;
+  padding: 20px;
+  background: #f8f9fa;
+  border-radius: 5px;
 }
 </style>

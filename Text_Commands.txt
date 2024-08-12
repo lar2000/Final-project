@@ -1,1 +1,11 @@
 1.03.31
+
+needed: composer(2.5.x), xampp, nodejs(20), 
+
+    composer install 
+   
+    npm install 
+    php artisan generate:key
+
+run program :
+  npm run dev && php artisan serve

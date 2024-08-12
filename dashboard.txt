@@ -1,0 +1,121 @@
+<template>
+  <div class="report-container">
+    <div class="report-header">
+      <h1>ລາຍງານ</h1>
+      <p>ລາຍງານສະຖິຕິການຊຳລະ</p>
+    </div>
+    <div class="report-body" ref="reportSection">
+      <table class="report-table">
+        <thead>
+          <tr>
+            <th>ລະຫັດເຊົ່າ</th>
+            <th>ປີ-ເດືອນ</th>
+            <th>ເບີຫ້ອງ</th>
+            <th>ລະຫັດລູກຄ້າ</th>
+            <th>ຄ່າຫ້ອງ</th>
+            <th>ຄ່າໄຟ</th>
+            <th>ຄ່ານໍ້າ</th>
+            <th>ຄ່າຂີ້ເຫຍື້ອ</th>
+            <th>ລວມ</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="payment in payments" :key="payment.pay_id">
+            <td>{{ payment.rent_id }}</td>
+            <td>{{ payment.month_year }}</td>
+            <td>{{ payment.room_number }}</td>
+            <td>{{ payment.cust_id }}</td>
+            <td>{{ payment.room_price }}</td>
+            <td>{{ payment.ele_price }}</td>
+            <td>{{ payment.water_price }}</td>
+            <td>{{ payment.gar_price }}</td>
+            <td>{{ calculateTotalBill(payment) }}</td>
+          </tr>
+          <tr v-if="payments.length === 0">
+            <td colspan="9" class="text-center">ບໍ່ມີຂໍ້ມູນ</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="report-actions">
+      <button @click="saveReportAsPDF" class="btn btn-success">Save as PDF</button>
+    </div>
+  </div>
+</template>
+
+<script>
+import html2pdf from 'html2pdf.js';
+import axios from 'axios';
+
+export default {
+  data() {
+    return {
+      payments: []
+    };
+  },
+  methods: {
+    async fetchPayments() {
+      try {
+        const response = await axios.get('/api/payments');
+        this.payments = response.data;
+      } catch (error) {
+        console.error('Error fetching payments:', error);
+      }
+    },
+    calculateTotalBill(payment) {
+      return parseInt(payment.room_price) + parseInt(payment.ele_price) + parseInt(payment.water_price) + parseInt(payment.gar_price);
+    },
+    saveReportAsPDF() {
+      const reportElement = this.$refs.reportSection;
+      html2pdf()
+        .from(reportElement)
+        .set({
+          filename: 'report.pdf',
+          html2canvas: { scale: 2 },
+          jsPDF: { orientation: 'portrait' }
+        })
+        .save();
+    }
+  },
+  mounted() {
+    this.fetchPayments();
+  }
+};
+</script>
+
+<style scoped>
+.report-container {
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+.report-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+.report-body {
+  margin-bottom: 20px;
+}
+.report-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.report-table th,
+.report-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: center;
+}
+.report-table th {
+  background-color: #f4f4f4;
+}
+.report-actions {
+  text-align: center;
+}
+.btn {
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 16px;
+}
+</style>

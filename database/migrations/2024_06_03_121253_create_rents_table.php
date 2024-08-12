@@ -4,31 +4,24 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
+class CreateRentsTable extends Migration
 {
-    /**
-     * Run the migrations.
-     */
-    public function up(): void
+    public function up()
     {
         Schema::create('rents', function (Blueprint $table) {
             $table->id('rent_id');
+            $table->integer('book_id');
+            $table->string('room_number');
             $table->date('date_start');
             $table->date('date_end');
-            $table->string('book_id');
-            $table->string('room_number');
             $table->integer('cust_id');
-            $table->integer('user_id');
-            $table->integer('room_price');
+            $table->decimal('room_price', 8, 2);
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
+    public function down()
     {
         Schema::dropIfExists('rents');
     }
-};
+}

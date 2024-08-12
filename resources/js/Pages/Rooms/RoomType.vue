@@ -62,7 +62,7 @@
                                       </a>
                                     </li>
                                     <li>
-                                      <a href="#" @click="deleteRoomT(roomtype.roomtype_id)">
+                                      <a href="#" @click="deleteRoomT(roomtype.id)">
                                         <i class="menu-icon bx bxs-trash"></i>
                                         <span>ລົບ</span>
                                       </a>
@@ -129,7 +129,7 @@
         showForm: false,
         formMode: 'add', // or 'edit'
         form: {
-          id: '',
+          id: null,
           roomtype_id: '',
           roomtype_name: '',
           room_price: '',
@@ -158,7 +158,7 @@
           this.form = { ...roomtype };
         } else {
           this.form = {
-            id: '',
+            id: null,
             roomtype_id: '',
             roomtype_name: '',
             room_price: '',

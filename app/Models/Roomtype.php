@@ -14,4 +14,8 @@ class Roomtype extends Model
         'roomtype_name',
         'room_price',
     ];
+    public function rooms()
+    {
+        return $this->hasMany(Room::class, 'roomtype_id');
+    }
 }

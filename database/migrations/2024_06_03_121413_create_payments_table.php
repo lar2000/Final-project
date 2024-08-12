@@ -16,9 +16,10 @@ return new class extends Migration
             $table->id('pay_id');
             $table->integer('roomtype_id');
             $table->string('room_number');
-            $table->date('month_year', 12);
             $table->string('rent_id');
-            $table->integer('room_price');
+            $table->integer('cust_id');
+            $table->date('month_year');
+            $table->decimal('room_price');
             //ຄ່າໄຟ
            
             $table->integer('ele_price');

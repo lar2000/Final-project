@@ -7,9 +7,7 @@
             <div class="nk-block-head nk-block-head-sm">
               <div class="nk-block-between">
                 <div class="nk-block-head-content">
-                  <h3 class="nk-block-title page-title">
-                    User's Lists
-                  </h3>
+                  <h3 class="nk-block-title page-title">ຂໍ້ມູນຜູ້ໃຊ້</h3>
                 </div>
                 <div class="nk-block-head-content" v-if="!ShowForm">
                   <div class="toggle-wrap nk-block-tools-toggle">
@@ -20,7 +18,13 @@
                       <ul class="nk-block-tools g-3">
                         <li class="nk-block-tools-opt">
                           <div class="d-flex">
-                            <input type="text" class="form-control me-2" v-model="Search" @keyup.enter="fetchUsers()" placeholder="Search...">
+                            <input 
+                              type="text" 
+                              class="form-control me-2" 
+                              v-model="Search" 
+                              @keyup.enter="fetchUsers" 
+                              placeholder="Search by name or ID..."
+                            >
                             <router-link to="/Add_User" class="btn btn-icon btn-primary">
                               <i class="bx bx-plus-medical"></i>
                             </router-link>
@@ -44,8 +48,8 @@
                           <th class="nk-tb-col">ຊື່</th>
                           <th class="nk-tb-col">ນາມສະກຸນ</th>
                           <th class="nk-tb-col">ເພດ</th>
-                          <th class="nk-tb-col">ເບີໂທ</th>
-                          <th class="nk-tb-col">ອີເມວ໌</th>
+                          <th class="nk-tb-col">ເບອໂທ</th>
+                          <th class="nk-tb-col">ອີເມວ</th>
                           <th class="nk-tb-col">ຈັດການ</th>
                         </tr>
                       </thead>
@@ -65,9 +69,7 @@
                               <ul class="nk-tb-actions gx-1">
                                 <li>
                                   <div class="drodown">
-                                    <a href="#"
-                                       class="dropdown-toggle btn btn-icon btn-trigger"
-                                       data-bs-toggle="dropdown">
+                                    <a href="#" class="dropdown-toggle btn btn-icon btn-trigger" data-bs-toggle="dropdown">
                                       <i class='bx bx-dots-horizontal'></i>
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-end">
@@ -134,7 +136,9 @@ export default {
     },
     fetchUsers() {
       axios.get('/api/users', {
-        params: { search: this.Search }
+        params: {
+          search: this.Search
+        }
       })
       .then(response => {
         this.users = response.data.users;
@@ -168,7 +172,6 @@ export default {
 </script>
 
 <style scoped>
-/* Add any scoped styles here */
 @media (max-width: 768px) {
   .nk-tb-col {
     font-size: 14px;

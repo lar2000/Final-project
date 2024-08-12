@@ -11,21 +11,12 @@ class RoomController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request): JsonResponse
-    {
-        try {
-            $search = $request->query('search');
-            $rooms = Room::query()
-                ->when($search, function ($query) use ($search) {
-                    $query->where('room_number', 'like', "%{$search}%");
-                })
-                ->get();
+    public function index(Request $request)
+{
+    $rooms = Room::with('roomType')->get(); // Include roomType relationship
+    return response()->json($rooms);
+}
 
-            return response()->json($rooms);
-        } catch (\Exception $e) {
-            return response()->json(['error' => 'Unable to fetch rooms.'], 500);
-        }
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -56,7 +47,20 @@ class RoomController extends Controller
 
     /**
      * Update the specified resource in storage.
+     * 
      */
+    public function updateStatus(Request $request, $roomNumber)
+    {
+        $room = Room::where('room_number', $roomNumber)->first();
+        if ($room) {
+            $room->status = $request->status;
+            $room->save();
+            return response()->json(['message' => 'Room status updated successfully.'], 200);
+        }
+        return response()->json(['message' => 'Room not found.'], 404);
+    }
+    
+
     public function update(Request $request, Room $room): JsonResponse
     {
         $validated = $request->validate([

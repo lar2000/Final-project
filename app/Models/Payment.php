@@ -13,6 +13,7 @@ class Payment extends Model
         'roomtype_id',
         'room_number',
         'rent_id',
+        'cust_id',
         'month_year',
         'room_price',
         'ele_price',

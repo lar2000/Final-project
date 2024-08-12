@@ -38,7 +38,7 @@
                       <thead>
                         <tr class="nk-tb-item nk-tb-head">
                           <th class="nk-tb-col">ເບີຫ້ອງ</th>
-                          <th class="nk-tb-col">ລະຫັດປະເພດຫ້ອງ</th>
+                          <th class="nk-tb-col">ປະເພດຫ້ອງ</th>
                           <th class="nk-tb-col">Status</th>
                           <th class="nk-tb-col">ຈັດການ</th>
                         </tr>
@@ -46,7 +46,7 @@
                       <tbody>
                         <tr v-for="room in rooms" :key="room.id" class="nk-tb-item">
                           <td class="nk-tb-col">{{ room.room_number }}</td>
-                          <td class="nk-tb-col">{{ room.roomtype_id }}</td>
+                          <td class="nk-tb-col">{{ getRoomTypeName(room.roomtype_id) }}</td>
                           <td class="nk-tb-col">
                             <span :class="getStatusClass(room.status)">
                               {{ room.status }}
@@ -78,7 +78,7 @@
                         </tr>
                         <tr v-if="rooms.length === 0">
                           <td colspan="4" class="text-center">No rooms found</td>
-                        </tr>
+                      </tr>
                       </tbody>
                     </table>
                   </div>
@@ -103,13 +103,17 @@
                   <div v-if="errors.room_number" class="text-danger">{{ errors.room_number[0] }}</div>
                 </div>
                 <div class="mb-3">
-                  <label for="roomtypeId" class="form-label">ລະຫັດປະເພດຫ້ອງ</label>
-                  <input type="number" class="form-control" v-model="form.roomtype_id" required>
+                  <label for="roomtypeId" class="form-label">ປະເພດຫ້ອງ</label>
+                  <select id="roomtypeId" class="form-select" v-model="form.roomtype_id" required>
+                    <option v-for="roomType in roomTypes" :key="roomType.id" :value="roomType.roomtype_id">
+                      {{ roomType.roomtype_name }}
+                    </option>
+                  </select>
                   <div v-if="errors.roomtype_id" class="text-danger">{{ errors.roomtype_id[0] }}</div>
                 </div>
                 <div class="mb-3">
                   <label for="status" class="form-label">ສະຖານະຫ້ອງ</label>
-                  <select id="status" class="select2 form-select" v-model="form.status">
+                  <select id="status" class="select2 form-select" v-model="form.status" :disabled="formMode === 'edit'">
                     <option value="ຫວ່າງ">ຫວ່າງ</option>
                     <option value="ບໍ່ຫວ່າງ">ບໍ່ຫວ່າງ</option>
                     <option value="ຈອງແລ້ວ">ຈອງແລ້ວ</option>
@@ -129,53 +133,89 @@
 
 <script>
 import axios from 'axios';
-
+import CheckOut from '../Check-in-out/check-out.vue';
 export default {
-  data() {
-    return {
-      rooms: [],
-      showForm: false,
-      formMode: 'add', // or 'edit'
-      form: {
+ // In your room component script
+ components: {
+    CheckOut
+  },
+data() {
+  return {
+    rooms: [],
+    roomTypes: [], // Add this line
+    showForm: false,
+    formMode: 'add', // or 'edit'
+    form: {
+      id: null,
+      room_number: '',
+      roomtype_id: null,
+      status: '',
+    },
+    search: '',
+    errors: {},
+  };
+},
+mounted() {
+  this.fetchRooms();
+  this.fetchRoomTypes(); 
+  this.$on('checkout-added', this.updateRoomStatus);// Add this line
+},
+methods: {
+  getRoomTypeName(roomtypeId) {
+    const roomType = this.roomTypes.find((roomType) => roomType.roomtype_id === roomtypeId);
+    return roomType ? roomType.roomtype_name : '';
+  },
+  fetchRooms() {
+    axios.get('/api/rooms', { params: { search: this.search } })
+      .then(response => {
+        this.rooms = response.data;
+      })
+      .catch(error => {
+        console.error('Error fetching rooms:', error);
+      });
+  },
+  fetchRoomTypes() { // Add this method
+    axios.get('/api/roomtypes')
+      .then(response => {
+        this.roomTypes = response.data;
+      })
+      .catch(error => {
+        console.error('Error fetching room types:', error);
+      });
+},
+  toggleForm(mode, room = null) {
+    this.showForm = !this.showForm;
+    this.formMode = mode;
+    if (room) {
+      this.form = { ...room };
+    } else {
+      this.form = {
         id: null,
         room_number: '',
         roomtype_id: null,
         status: '',
-      },
-      search: '',
-      errors: {},
-    };
+      };
+    }
+    this.errors = {};
   },
-  mounted() {
-    this.fetchRooms();
+  addRoom() {
+    axios.post('/api/rooms', this.form)
+      .then(response => {
+        alert(response.data.message);
+        this.fetchRooms();
+        this.toggleForm();
+      })
+      .catch(error => {
+        if (error.response && error.response.data.errors) {
+          this.errors = error.response.data.errors;
+        } else {
+          alert('Failed to add room. Please try again.');
+        }
+      });
   },
-  methods: {
-    fetchRooms() {
-      axios.get('/api/rooms', { params: { search: this.search } })
-        .then(response => {
-          this.rooms = response.data;
-        })
-        .catch(error => {
-          console.error('Error fetching rooms:', error);
-        });
-    },
-    toggleForm(mode, room = null) {
-      this.showForm = !this.showForm;
-      this.formMode = mode;
-      if (room) {
-        this.form = { ...room };
-      } else {
-        this.form = {
-          id: null,
-          room_number: '',
-          roomtype_id: null,
-          status: '',
-        };
-      }
-      this.errors = {};
-    },
-    addRoom() {
-      axios.post('/api/rooms', this.form)
+  updateRoom() {
+    if (this.form.id) {
+      axios.put(`/api/rooms/${this.form.id}`, this.form)
         .then(response => {
           alert(response.data.message);
           this.fetchRooms();
@@ -185,48 +225,52 @@ export default {
           if (error.response && error.response.data.errors) {
             this.errors = error.response.data.errors;
           } else {
-            alert('Failed to add room. Please try again.');
+            alert('Failed to update room. Please try again.');
           }
         });
-    },
-    updateRoom() {
-      if (this.form.id) {
-        axios.put(`/api/rooms/${this.form.id}`, this.form)
-          .then(response => {
-            alert(response.data.message);
-            this.fetchRooms();
-            this.toggleForm();
-          })
-          .catch(error => {
-            if (error.response && error.response.data.errors) {
-              this.errors = error.response.data.errors;
-            } else {
-              alert('Failed to update room. Please try again.');
-            }
-          });
-      } else {
-        console.error('Room ID is missing for update.');
-      }
-    },
-    deleteRoom(id) {
-      axios.delete(`/api/rooms/${id}`)
-        .then(() => {
+    } else {
+      console.error('Room ID is missing for update.');
+    }
+  },
+  deleteRoom(id) {
+    if (confirm('Are you sure you want to delete this payment?')) {
+    axios.delete(`/api/rooms/${id}`)
+      .then(() => {
+        this.fetchRooms();
+        alert('Room deleted successfully!');
+      })
+      .catch(error => {
+        console.error('Error deleting room:', error);
+        alert('Failed to delete room. Please try again.');
+      });
+    }
+  },
+  updateRoomStatus(rentId) {
+      axios.put('/api/rooms/status', { room_number: this.getRoomNumberByRentId(rentId), status: 'ຫວ່າງ' })
+        .then(response => {
+          console.log('Room status updated successfully');
           this.fetchRooms();
-          alert('Room deleted successfully!');
         })
         .catch(error => {
-          console.error('Error deleting room:', error);
-          alert('Failed to delete room. Please try again.');
+          console.error('Error updating room status:', error);
         });
     },
-    getStatusClass(status) {
-      return {
-        'text-success': status === 'ຫວ່າງ',
-        'text-warning': status === 'ບໍ່ຫວ່າງ',
-        'text-danger': status === 'ຈອງແລ້ວ'
-      };
-    }
+    getRoomNumberByRentId(rentId) {
+      const rent = this.rents.find(rent => rent.rent_id === rentId);
+      return rent ? rent.room_number : '';
+    },
+  getStatusClass(status) {
+    return {
+      'text-success': status === 'ຫວ່າງ',
+      'text-warning': status === 'ບໍ່ຫວ່າງ',
+      'text-danger': status === 'ຈອງແລ້ວ'
+    };
   }
+},
+mounted() {
+  this.fetchRooms();
+  this.fetchRoomTypes(); // Add this line
+},
 };
 </script>
 

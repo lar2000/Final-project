@@ -125,14 +125,17 @@ export default {
       this.uploadimg = this.defaultImage; // Reset to default image
     },
     saveChanges() {
-      if (!this.form.user_id) {
-        alert('User ID is missing');
+      if (!this.validateForm()) {
         return;
       }
 
       const formData = new FormData();
       for (const key in this.form) {
-        formData.append(key, this.form[key]);
+        if (this.form[key] instanceof File) {
+          formData.append(key, this.form[key]);
+        } else {
+          formData.append(key, this.form[key]);
+        }
       }
 
       axios.put(`/api/users/${this.form.user_id}`, formData, {
@@ -146,10 +149,12 @@ export default {
           this.$router.push('/Users');
         } else {
           alert('Failed to update user.');
+          this.formErrors = response.data.errors || {};
         }
       })
       .catch(error => {
-        console.error('Error updating user:', error);
+        console.error('Error updating user:', error.response.data);
+        this.formErrors = error.response.data.errors || {};
         alert('Failed to update user. Please try again later.');
       });
     },
@@ -212,4 +217,11 @@ export default {
 
 <style scoped>
 /* Add your custom styles here */
+form {
+  max-width: 950px;
+  margin: 0 auto;
+  padding: 20px;
+  background: #f8f9fa;
+  border-radius: 5px;
+}
 </style>
