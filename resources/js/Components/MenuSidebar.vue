@@ -3,7 +3,7 @@
   <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
     <div class="app-brand demo">
       <router-link to="" class="app-brand-link">
-        <span class="app-brand-text demo menu-text fw-bold ms-2">AMS</span>
+        <span class="app-brand-text demo menu-text fw-bold ms-2" style="color:cornflowerblue">AMS ຈີເມັ່ງທໍ່</span>
       </router-link>
     </div>
     <div>

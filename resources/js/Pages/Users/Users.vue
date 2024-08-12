@@ -76,13 +76,13 @@
                                       <ul class="link-list-opt no-bdr">
                                         <li>
                                           <router-link :to="`/Edit_User/${user.id}`">
-                                            <i class='menu-icon bx bxs-edit-alt'></i>
+                                            <i class='menu-icon bx bxs-edit-alt' style="color: chartreuse;"></i>
                                             <span>ແກ້ໄຂ</span>
                                           </router-link>
                                         </li>
                                         <li>
                                           <a href="#" @click="deleteUser(user.id)">
-                                            <i class='menu-icon bx bxs-trash'></i>
+                                            <i class='menu-icon bx bxs-trash' style="color: red;"></i>
                                             <span>ລຶບ</span>
                                           </a>
                                         </li>
@@ -148,22 +148,28 @@ export default {
       });
     },
     deleteUser(userId) {
-      if (confirm('Are you sure you want to delete this user?')) {
-        axios.delete(`/api/users/${userId}`)
-          .then(response => {
-            if (response.data.message) {
-              this.users = this.users.filter(user => user.id !== userId);
-              alert('User deleted successfully!');
-            } else {
-              alert('Failed to delete user.');
-            }
-          })
-          .catch(error => {
-            console.error('Error deleting user:', error);
-            alert('Failed to delete user.');
-          });
-      }
-    }
+  if (confirm('Are you sure you want to delete this user?')) {
+    axios.delete(`/api/users/${userId}`)
+      .then(response => {
+        // Log the response for debugging
+        console.log('Delete response:', response);
+
+        // Check if the response status is in the 2xx range (success)
+        if (response.status >= 200 && response.status < 300) {
+          // Update the user list to reflect the deletion
+          this.users = this.users.filter(user => user.id !== userId);
+          alert('User deleted successfully!');
+        } else {
+          alert('Failed to delete user.');
+        }
+      })
+      .catch(error => {
+        console.error('Error deleting user:', error);
+        alert('Failed to delete user.');
+      });
+  }
+}
+
   },
   mounted() {
     this.fetchUsers();

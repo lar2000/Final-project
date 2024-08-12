@@ -131,13 +131,13 @@
  
                                   <li>
                                     <a href="#" @click="toggleForm('edit', payment)">
-                                      <i class="menu-icon bx bxs-edit-alt"></i>
+                                      <i class="menu-icon bx bxs-edit-alt" style="color: chartreuse;"></i>
                                       <span>ແກ້ໄຂ</span>
                                     </a>
                                   </li>
                                   <li>
                                     <a href="#" @click="deletePayment(payment.id)">
-                                      <i class="menu-icon bx bxs-trash"></i>
+                                      <i class="menu-icon bx bxs-trash" style="color: red;"></i>
                                       <span>ລົບ</span>
                                     </a>
                                   </li>

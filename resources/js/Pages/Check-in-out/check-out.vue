@@ -94,20 +94,20 @@
                               <div class="dropdown-menu dropdown-menu-end">
                                 <ul class="link-list-opt no-bdr">
                                   <li>
-          <a href="#" @click="generateBill(checkout)">
-            <i class="menu-icon bx bxs-file"></i>
-            <span>ສ້າງໃບບິນ</span>
-          </a>
-        </li>
+                                      <a href="#" @click="generateBill(checkout)">
+                                        <i class="menu-icon bx bxs-file"></i>
+                                        <span>ສ້າງໃບບິນ</span>
+                                      </a>
+                                  </li>
                                   <li>
                                     <a href="#" @click="toggleForm('edit', checkout)">
-                                      <i class="menu-icon bx bxs-edit-alt"></i>
+                                      <i class="menu-icon bx bxs-edit-alt" style="color: chartreuse;"></i>
                                       <span>ແກ້ໄຂ</span>
                                     </a>
                                   </li>
                                   <li>
                                     <a href="#" @click="deleteCheckout(checkout.checkout_id)">
-                                      <i class="menu-icon bx bxs-trash"></i>
+                                      <i class="menu-icon bx bxs-trash" style="color: red;"></i>
                                       <span>ລົບ</span>
                                     </a>
                                   </li>

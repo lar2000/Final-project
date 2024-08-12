@@ -65,13 +65,13 @@
                                   <ul class="link-list-opt no-bdr">
                                     <li>
                                       <a href="#" @click="toggleForm('edit', booking)">
-                                        <i class="menu-icon bx bxs-edit-alt"></i>
+                                        <i class="menu-icon bx bxs-edit-alt" style="color: chartreuse;"></i>
                                         <span>ແກ້ໄຂ</span>
                                       </a>
                                     </li>
                                     <li>
                                       <a href="#" @click="deleteBooking(booking.book_id)">
-                                        <i class="menu-icon bx bxs-trash"></i>
+                                        <i class="menu-icon bx bxs-trash" style="color: red;"></i>
                                         <span>ລົບ</span>
                                       </a>
                                     </li>
