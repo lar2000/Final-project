@@ -72,7 +72,7 @@
                                     </a>
                                   </li>
                                   <li>
-                                    <a href="#" @click="deleteRent(rent.rent_id)">
+                                    <a href="#" @click="deleteRent(rents.rent_id)">
                                       <i class="menu-icon bx bxs-trash" style="color: red;"></i>
                                       <span>ລົບ</span>
                                     </a>
@@ -225,7 +225,6 @@ export default {
       showBill: false,
       formMode: 'add',
       form: {
-        rent_id: null,
         book_id: '',
         room_number: '',
         date_start: '',
@@ -337,17 +336,17 @@ export default {
         console.error('ID is missing for update.');
       }
     },
-    deleteRent(rent_id) {
-      if (confirm('Are you sure you want to delete this rent?')) {
-        axios.delete(`/api/rents/${rent_id}`)
-          .then(() => {
-            this.fetchRents();
-            alert('Room deleted successfully!');
-          })
-          .catch(error => {
-            console.error('Error deleting:', error);
-            alert('Failed to delete. Please try again.');
-          });
+    async deleteRent(rentId) {
+      if (confirm('ຕ້ອງການລົບຂໍ້ມູນແທ້ບໍ່?')) {
+        try {
+          const response = await axios.delete(`/rents/${rentId}`);
+          this.alertMessage = response.data.message;
+          alert('ລົບຂໍ້ມູນສຳເລັດແລ້ວ');
+          this.fetchRents(); // Refresh the list
+        } catch (error) {
+          this.alertMessage = error.response.data.message || 'Failed to delete record.';
+          alert('ລົບຂໍ້ມູນລົ້ມເຫຼວ!!');
+        }
       }
     },
     generateBill(rent) {

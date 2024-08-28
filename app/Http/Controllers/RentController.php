@@ -61,16 +61,17 @@ class RentController extends Controller
         return response()->json($rent);
     }
 
-    public function destroy($id)
-    {
-        $rent = Rent::find($id);
+    // In app/Http/Controllers/RentController.php
+public function destroy($id)
+{
+    $rent = Rent::find($id);
 
-        if (!$rent) {
-            return response()->json(['message' => 'Rent not found'], 404);
-        }
-
+    if ($rent) {
         $rent->delete();
-
-        return response()->json(['message' => 'Rent deleted successfully']);
+        return response()->json(['message' => 'Rent record deleted successfully.'], 200);
+    } else {
+        return response()->json(['message' => 'Rent record not found.'], 404);
     }
+}
+
 }
